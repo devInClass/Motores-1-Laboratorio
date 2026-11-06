@@ -6,20 +6,28 @@ using UnityEngine;
 namespace SlugLab.Player
 {
     /// <summary>
-    /// Disparo, apuntado y ataque cuerpo a cuerpo del jugador.
+    /// Disparo, apuntado en 8 direcciones y ataque cuerpo a cuerpo.
     /// </summary>
+    /// <remarks>
+    /// El apuntado alimenta dos cosas: la dirección real de la bala y los
+    /// parámetros del blend tree (<c>AimAngle</c> y <c>Speed01</c>) que elige
+    /// la pose de disparo.
+    /// </remarks>
     public class PlayerCombat : MonoBehaviour
     {
         [Header("Referencias")]
         [SerializeField] private PlayerInput input;
         [SerializeField] private PlayerController controller;
         [SerializeField] private PlayerAnimator animator;
-        [SerializeField] private Transform muzzle;
         [SerializeField] private ProjectilePool projectilePool;
         [SerializeField] private Hitbox meleeHitbox;
 
         [Header("Arma inicial")]
         [SerializeField] private WeaponDefinition startingWeapon;
+
+        [Header("Punto de salida")]
+        [SerializeField] private float muzzleHeight = 0.8f;
+        [SerializeField] private float muzzleDistance = 0.7f;
 
         [Header("Cuerpo a cuerpo")]
         [SerializeField] private float meleeActiveTime = 0.12f;
@@ -30,6 +38,50 @@ namespace SlugLab.Player
         private Cooldown _meleeTimer;
 
         public Weapon CurrentWeapon => _weapon;
+
+        /// <summary>¿Está apuntando? Dispara o mantiene ↑.</summary>
+        public bool IsAiming => input != null && (input.FireHeld || input.Vertical > 0.5f);
+
+        /// <summary>
+        /// Dirección de apuntado en 8 sentidos: arriba, diagonales y horizontal.
+        /// Hacia abajo solo en el aire (en el suelo, ↓ se usa para agacharse).
+        /// </summary>
+        public Vector2 AimDirection
+        {
+            get
+            {
+                if (input == null || controller == null) return Vector2.right;
+
+                float horizontal = input.Horizontal;
+                float vertical = input.Vertical;
+                float facing = controller.Facing;
+
+                if (vertical > 0.5f)
+                {
+                    float x = Mathf.Abs(horizontal) > 0.5f ? facing : 0f;
+                    return new Vector2(x, 1f).normalized;
+                }
+
+                if (vertical < -0.5f && !controller.IsGrounded)
+                {
+                    float x = Mathf.Abs(horizontal) > 0.5f ? facing : 0f;
+                    return new Vector2(x, -1f).normalized;
+                }
+
+                return new Vector2(facing, 0f);
+            }
+        }
+
+        /// <summary>
+        /// Ángulo de apuntado en grados para el blend tree: 90 = arriba,
+        /// 45 = diagonal, 0 = horizontal, -45 = diagonal abajo, -90 = abajo.
+        /// El volteo horizontal lo resuelve el Visual, por eso usamos |x|.
+        /// </summary>
+        public static float AimAngleDegrees(Vector2 direction)
+        {
+            if (direction.sqrMagnitude < 0.0001f) return 0f;
+            return Mathf.Atan2(direction.y, Mathf.Abs(direction.x)) * Mathf.Rad2Deg;
+        }
 
         private void Awake()
         {
@@ -57,22 +109,13 @@ namespace SlugLab.Player
             }
         }
 
-        /// <summary>Hacia dónde apunta: arriba si se pulsa ↑, si no hacia donde mira.</summary>
-        public Vector2 AimDirection
-        {
-            get
-            {
-                if (input != null && input.Vertical > 0.5f) return Vector2.up;
-                return controller != null && controller.Facing < 0 ? Vector2.left : Vector2.right;
-            }
-        }
-
         private void Fire()
         {
             WeaponDefinition def = _weapon.Definition;
             if (def == null || def.projectilePrefab == null || projectilePool == null) return;
 
             Vector2 aim = AimDirection;
+            Vector3 origin = transform.position + Vector3.up * muzzleHeight + (Vector3)(aim * muzzleDistance);
 
             for (int i = 0; i < def.projectilesPerShot; i++)
             {
@@ -81,19 +124,10 @@ namespace SlugLab.Player
                     : 0f;
 
                 Vector2 direction = (Vector2)(Quaternion.Euler(0f, 0f, spread) * aim);
-                Vector3 spawnPosition = muzzle != null ? muzzle.position : transform.position;
-                Projectile projectile = projectilePool.Get(spawnPosition, Quaternion.identity);
+                Projectile projectile = projectilePool.Get(origin, Quaternion.identity);
                 projectile.Launch(direction, Team.Player, def.damage, def.projectileSpeed);
             }
 
-            if (muzzle != null)
-            {
-                Vector3 local = muzzle.localPosition;
-                local.x = Mathf.Abs(local.x) * controller.Facing;
-                muzzle.localPosition = local;
-            }
-
-            if (animator != null) animator.PlayShoot();
             if (def.shotSfx != null) Audio.AudioManager.PlaySfx(def.shotSfx, 0.6f);
             if (def.screenShake > 0f) CameraFollow2D.ShakeCurrent(def.screenShake, 0.08f);
         }

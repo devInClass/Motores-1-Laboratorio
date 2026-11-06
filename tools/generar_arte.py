@@ -91,8 +91,12 @@ def save(image: Image.Image, *parts: str, name: str):
 # Personajes
 # --------------------------------------------------------------------------
 
-def soldier(palette: dict, pose: str, phase: float = 0.0) -> Image.Image:
-    """Soldado de 32x40 con el pivote en los pies (abajo al centro)."""
+def soldier(palette: dict, pose: str, phase: float = 0.0, aim: float | None = None, flash: bool = False) -> Image.Image:
+    """Soldado de 32x40 con el pivote en los pies (abajo al centro).
+
+    Si ``aim`` no es None se dibuja el brazo apuntando en ese ángulo (grados):
+    90 = arriba, 45 = diagonal arriba, 0 = horizontal, -45 = diagonal abajo.
+    """
     img = canvas(32, 40)
     d = ImageDraw.Draw(img)
 
@@ -146,7 +150,25 @@ def soldier(palette: dict, pose: str, phase: float = 0.0) -> Image.Image:
     d.rectangle([17, head_y + 4, 19, head_y + 5], fill=EYE)
 
     # Brazo y arma
-    if pose in ("shoot", "aim"):
+    if aim is not None:
+        angle = math.radians(aim)
+        shoulder_x, shoulder_y = 19.0, body_top + 4.0
+        elbow_x = shoulder_x + math.cos(angle) * 6.0
+        elbow_y = shoulder_y - math.sin(angle) * 6.0
+        gun_length = 5.0 if flash else 4.0
+        gun_x = elbow_x + math.cos(angle) * gun_length
+        gun_y = elbow_y - math.sin(angle) * gun_length
+
+        d.line([(shoulder_x, shoulder_y), (elbow_x, elbow_y)], fill=OUTLINE, width=5)
+        d.line([(shoulder_x, shoulder_y), (elbow_x, elbow_y)], fill=palette["vest"], width=3)
+        d.line([(elbow_x, elbow_y), (gun_x, gun_y)], fill=OUTLINE, width=4)
+        d.line([(elbow_x, elbow_y), (gun_x, gun_y)], fill=palette["gun"], width=2)
+        d.rectangle([int(elbow_x) - 1, int(elbow_y) - 1, int(elbow_x) + 1, int(elbow_y) + 1], fill=palette["skin"])
+
+        if flash:
+            radius = 3
+            d.ellipse([gun_x - radius, gun_y - radius, gun_x + radius, gun_y + radius], fill=(255, 226, 120, 255))
+    elif pose in ("shoot", "aim"):
         block(d, 20, body_top + 3, 7, 4, palette["vest"])
         block(d, 25, body_top + 3, 8, 3, palette["gun"])
         if pose == "shoot":
@@ -468,6 +490,16 @@ def main() -> None:
     soldier(PLAYER, "shoot", 0).save(os.path.join(characters, "player_aim_0.png"))
     soldier(PLAYER, "dead").save(os.path.join(characters, "player_dead_0.png"))
     soldier(PLAYER, "idle", 0.5).save(os.path.join(characters, "player_hurt_0.png"))
+
+    # Poses de apuntado para el blend tree 2D: 5 direcciones x (de pie, corriendo)
+    aim_directions = [("up", 90), ("up_right", 45), ("right", 0), ("down_right", -45), ("down", -90)]
+    for name, angle in aim_directions:
+        for state in ("stand", "run"):
+            for frame in range(2):
+                pose = "idle" if state == "stand" else "run"
+                phase = 0.0 if state == "stand" else frame * 0.25
+                image = soldier(PLAYER, pose, phase, aim=angle, flash=(frame == 0))
+                image.save(os.path.join(characters, f"player_aim_{name}_{state}_{frame}.png"))
 
     # Hoja de sprites para el ejercicio de recorte (128x40, 4 frames de 32x40)
     sheet = canvas(32 * 4, 40)

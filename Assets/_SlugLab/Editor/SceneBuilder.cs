@@ -7,6 +7,7 @@ using SlugLab.Enemies;
 using SlugLab.Level;
 using SlugLab.Player;
 using SlugLab.UI;
+using SlugLab.VFX;
 using UnityEditor;
 using UnityEditor.Animations;
 using UnityEditor.SceneManagement;
@@ -33,6 +34,10 @@ namespace SlugLab.EditorTools
             public GameObject BulletPlayer;
             public GameObject BulletEnemy;
             public WeaponDefinition Weapon;
+            public GameObject VfxChispas;
+            public GameObject VfxExplosion;
+            public Material[] FlashMaterials;
+            public Material DissolveMaterial;
         }
 
         private class LevelSpec
@@ -55,11 +60,13 @@ namespace SlugLab.EditorTools
             public bool Hud = true;
             public bool Parallax = true;
             public bool Music = true;
+            public Action<Vector3> Decorate;
         }
 
         [MenuItem("Slug Lab/3. Generar juego completo", priority = 3)]
         public static void BuildAll()
-        {            ProjectSetup.ConfigureAll();
+        {
+            ProjectSetup.ConfigureAll();
             AssetDatabase.Refresh();
 
             BuildUtil.EnsureFolder(BuildUtil.PrefabRoot);
@@ -110,6 +117,7 @@ namespace SlugLab.EditorTools
             assets.Soldier = CreateEnemyPrefab("Enemigo_Soldado", soldierConfig, soldierController, assets.BulletEnemy, Color.white);
             assets.Grenadier = CreateEnemyPrefab("Enemigo_Granadero", grenadierConfig, soldierController, assets.BulletEnemy, new Color(0.72f, 0.82f, 1f));
             assets.Boss = CreateBossPrefab(bossController, assets.BulletEnemy, assets.Soldier);
+            CreateVfx(assets);
 
             return assets;
         }
@@ -117,14 +125,15 @@ namespace SlugLab.EditorTools
         private static AnimatorController BuildPlayerAnimator()
         {
             AnimatorController controller = BuildUtil.NewController("Player");
-            controller.AddParameter("Speed", AnimatorControllerParameterType.Float);
+            controller.AddParameter("Speed01", AnimatorControllerParameterType.Float);
+            controller.AddParameter("AimAngle", AnimatorControllerParameterType.Float);
+            controller.AddParameter("Aiming", AnimatorControllerParameterType.Bool);
             controller.AddParameter("Grounded", AnimatorControllerParameterType.Bool);
             controller.AddParameter("VerticalSpeed", AnimatorControllerParameterType.Float);
             controller.AddParameter("Crouch", AnimatorControllerParameterType.Bool);
             controller.AddParameter("Dead", AnimatorControllerParameterType.Bool);
-            controller.AddParameter("Shoot", AnimatorControllerParameterType.Trigger);
-            controller.AddParameter("Melee", AnimatorControllerParameterType.Trigger);
             controller.AddParameter("Hurt", AnimatorControllerParameterType.Trigger);
+            controller.AddParameter("Melee", AnimatorControllerParameterType.Trigger);
 
             AnimatorStateMachine machine = controller.layers[0].stateMachine;
 
@@ -133,42 +142,83 @@ namespace SlugLab.EditorTools
             AnimationClip jump = BuildUtil.Clip("player_jump", new[] { BuildUtil.S("Personajes/player_jump_0") }, 1f, false);
             AnimationClip fall = BuildUtil.Clip("player_fall", new[] { BuildUtil.S("Personajes/player_fall_0") }, 1f, false);
             AnimationClip crouch = BuildUtil.Clip("player_crouch", new[] { BuildUtil.S("Personajes/player_crouch_0") }, 1f, false);
-            AnimationClip shoot = BuildUtil.Clip("player_shoot", BuildUtil.Seq("Personajes", "player_shoot_", 2), 16f, false);
             AnimationClip hurt = BuildUtil.Clip("player_hurt", new[] { BuildUtil.S("Personajes/player_hurt_0") }, 1f, false);
             AnimationClip dead = BuildUtil.Clip("player_dead", new[] { BuildUtil.S("Personajes/player_dead_0") }, 1f, false);
 
-            AnimatorState idleState = BuildUtil.State(machine, "Idle", idle, true);
-            AnimatorState runState = BuildUtil.State(machine, "Run", run);
+            // ----------------------------------------------------------
+            // Blend tree 1D: locomocion (idle <-> run) por velocidad 0..1
+            // ----------------------------------------------------------
+            AnimatorState locomotion = controller.CreateBlendTreeInController("Locomotion", out BlendTree locomotionTree);
+            locomotionTree.blendType = BlendTreeType.Simple1D;
+            locomotionTree.blendParameter = "Speed01";
+            locomotionTree.useAutomaticThresholds = false;
+            locomotionTree.AddChild(idle, 0f);
+            locomotionTree.AddChild(run, 1f);
+            machine.defaultState = locomotion;
+
+            // ----------------------------------------------------------
+            // Blend tree 2D: apuntado (5 direcciones x de pie/corriendo)
+            // X = AimAngle (-90..90)   Y = Speed01 (0..1)
+            // ----------------------------------------------------------
+            AnimatorState aim = controller.CreateBlendTreeInController("Aim", out BlendTree aimTree);
+            aimTree.blendType = BlendTreeType.FreeformCartesian2D;
+            aimTree.blendParameter = "AimAngle";
+            aimTree.blendParameterY = "Speed01";
+            aimTree.useAutomaticThresholds = false;
+
+            string[] directions = { "up", "up_right", "right", "down_right", "down" };
+            float[] angles = { 90f, 45f, 0f, -45f, -90f };
+
+            for (int i = 0; i < directions.Length; i++)
+            {
+                AnimationClip stand = BuildUtil.Clip($"player_aim_{directions[i]}_stand",
+                    BuildUtil.Seq("Personajes", $"player_aim_{directions[i]}_stand_", 2), 10f);
+                AnimationClip moving = BuildUtil.Clip($"player_aim_{directions[i]}_run",
+                    BuildUtil.Seq("Personajes", $"player_aim_{directions[i]}_run_", 2), 12f);
+
+                aimTree.AddChild(stand, new Vector2(angles[i], 0f));
+                aimTree.AddChild(moving, new Vector2(angles[i], 1f));
+            }
+
             AnimatorState jumpState = BuildUtil.State(machine, "Jump", jump);
             AnimatorState fallState = BuildUtil.State(machine, "Fall", fall);
             AnimatorState crouchState = BuildUtil.State(machine, "Crouch", crouch);
-            AnimatorState shootState = BuildUtil.State(machine, "Shoot", shoot);
             AnimatorState hurtState = BuildUtil.State(machine, "Hurt", hurt);
             AnimatorState deadState = BuildUtil.State(machine, "Dead", dead);
 
-            BuildUtil.Link(idleState, runState, 0.06f, false, (AnimatorConditionMode.Greater, "Speed", 0.1f));
-            BuildUtil.Link(runState, idleState, 0.06f, false, (AnimatorConditionMode.Less, "Speed", 0.1f));
+            BuildUtil.Link(locomotion, aim, 0.08f, false,
+                (AnimatorConditionMode.If, "Aiming", 0f),
+                (AnimatorConditionMode.If, "Grounded", 0f),
+                (AnimatorConditionMode.IfNot, "Crouch", 0f));
+            BuildUtil.Link(aim, locomotion, 0.08f, false, (AnimatorConditionMode.IfNot, "Aiming", 0f));
 
-            BuildUtil.Link(idleState, jumpState, 0.04f, false,
+            BuildUtil.Link(locomotion, jumpState, 0.05f, false,
                 (AnimatorConditionMode.IfNot, "Grounded", 0f),
                 (AnimatorConditionMode.Greater, "VerticalSpeed", 0.1f));
-            BuildUtil.Link(runState, jumpState, 0.04f, false,
+            BuildUtil.Link(aim, jumpState, 0.05f, false,
                 (AnimatorConditionMode.IfNot, "Grounded", 0f),
                 (AnimatorConditionMode.Greater, "VerticalSpeed", 0.1f));
+            BuildUtil.Link(jumpState, fallState, 0.05f, false, (AnimatorConditionMode.Less, "VerticalSpeed", 0f));
 
-            BuildUtil.Link(jumpState, fallState, 0.04f, false, (AnimatorConditionMode.Less, "VerticalSpeed", 0f));
-            BuildUtil.Link(fallState, idleState, 0.04f, false, (AnimatorConditionMode.If, "Grounded", 0f));
+            BuildUtil.Link(fallState, aim, 0.06f, false,
+                (AnimatorConditionMode.If, "Grounded", 0f),
+                (AnimatorConditionMode.If, "Aiming", 0f));
+            BuildUtil.Link(fallState, locomotion, 0.06f, false,
+                (AnimatorConditionMode.If, "Grounded", 0f),
+                (AnimatorConditionMode.IfNot, "Aiming", 0f));
 
-            BuildUtil.Link(idleState, crouchState, 0.05f, false, (AnimatorConditionMode.If, "Crouch", 0f));
-            BuildUtil.Link(runState, crouchState, 0.05f, false, (AnimatorConditionMode.If, "Crouch", 0f));
-            BuildUtil.Link(crouchState, idleState, 0.05f, false, (AnimatorConditionMode.IfNot, "Crouch", 0f));
+            BuildUtil.Link(locomotion, crouchState, 0.06f, false, (AnimatorConditionMode.If, "Crouch", 0f));
+            BuildUtil.Link(aim, crouchState, 0.06f, false, (AnimatorConditionMode.If, "Crouch", 0f));
+            BuildUtil.Link(crouchState, locomotion, 0.06f, false,
+                (AnimatorConditionMode.IfNot, "Crouch", 0f),
+                (AnimatorConditionMode.IfNot, "Aiming", 0f));
+            BuildUtil.Link(crouchState, aim, 0.06f, false,
+                (AnimatorConditionMode.IfNot, "Crouch", 0f),
+                (AnimatorConditionMode.If, "Aiming", 0f));
 
             BuildUtil.AnyLink(machine, deadState, 0.05f, (AnimatorConditionMode.If, "Dead", 0f));
             BuildUtil.AnyLink(machine, hurtState, 0.03f, (AnimatorConditionMode.If, "Hurt", 0f));
-            BuildUtil.AnyLink(machine, shootState, 0.02f, (AnimatorConditionMode.If, "Shoot", 0f));
-
-            BuildUtil.Link(hurtState, idleState, 0.05f, true);
-            BuildUtil.Link(shootState, idleState, 0.05f, true);
+            BuildUtil.Link(hurtState, locomotion, 0.06f, true);
 
             return controller;
         }
@@ -352,10 +402,6 @@ namespace SlugLab.EditorTools
             groundCheck.transform.SetParent(go.transform, false);
             groundCheck.transform.localPosition = new Vector3(0f, 0.05f, 0f);
 
-            var muzzle = new GameObject("Muzzle");
-            muzzle.transform.SetParent(go.transform, false);
-            muzzle.transform.localPosition = new Vector3(0.62f, 0.8f, 0f);
-
             var melee = new GameObject("AtaqueCuerpo");
             melee.transform.SetParent(go.transform, false);
             melee.transform.localPosition = new Vector3(0.7f, 0.6f, 0f);
@@ -386,7 +432,6 @@ namespace SlugLab.EditorTools
             Binder.Set(combat, "input", input);
             Binder.Set(combat, "controller", playerController);
             Binder.Set(combat, "animator", animatorBridge);
-            Binder.Set(combat, "muzzle", muzzle.transform);
             Binder.Set(combat, "projectilePool", projectilePool);
             Binder.Set(combat, "meleeHitbox", hitbox);
             Binder.Set(combat, "startingWeapon", weapon);
@@ -528,6 +573,99 @@ namespace SlugLab.EditorTools
         // ------------------------------------------------------------------
         // Escenas
         // ------------------------------------------------------------------
+
+        // ------------------------------------------------------------------
+        // VFX y shaders
+        // ------------------------------------------------------------------
+
+        private static void CreateVfx(GameAssets assets)
+        {
+            BuildUtil.EnsureFolder($"{BuildUtil.DataRoot}/Materiales");
+
+            Shader flashShader = AssetDatabase.LoadAssetAtPath<Shader>("Assets/_SlugLab/Shaders/SpriteFlash.shader");
+            if (flashShader == null) flashShader = Shader.Find("SlugLab/2D Sprite Flash");
+            if (flashShader == null)
+            {
+                Debug.LogError("[Slug Lab] No se encontro el shader SpriteFlash.");
+                return;
+            }
+
+            assets.FlashMaterials = new[]
+            {
+                CreateFlashMaterial("Blanco_Flash_00", flashShader, 0f, 0f),
+                CreateFlashMaterial("Blanco_Flash_50", flashShader, 0.5f, 0f),
+                CreateFlashMaterial("Blanco_Flash_100", flashShader, 1f, 0f)
+            };
+            assets.DissolveMaterial = CreateFlashMaterial("Disolucion_55", flashShader, 0f, 0.55f);
+
+            Material particleMaterial = CreateParticleMaterial();
+            assets.VfxChispas = CreateParticlePrefab("VFX_Chispas", particleMaterial, 14, 0.35f, 5f, 0.16f, new Color(1f, 0.78f, 0.3f), 2.2f);
+            assets.VfxExplosion = CreateParticlePrefab("VFX_Explosion", particleMaterial, 30, 0.65f, 3.5f, 0.35f, new Color(1f, 0.45f, 0.15f), 3f);
+        }
+
+        private static Material CreateFlashMaterial(string name, Shader shader, float flash, float dissolve)
+        {
+            string path = $"{BuildUtil.DataRoot}/Materiales/{name}.mat";
+            AssetDatabase.DeleteAsset(path);
+
+            var material = new Material(shader) { name = name };
+            material.SetFloat("_FlashAmount", flash);
+            material.SetFloat("_DissolveAmount", dissolve);
+
+            AssetDatabase.CreateAsset(material, path);
+            return material;
+        }
+
+        private static Material CreateParticleMaterial()
+        {
+            string path = $"{BuildUtil.DataRoot}/Materiales/Particula_Chispa.mat";
+            AssetDatabase.DeleteAsset(path);
+
+            var material = new Material(Shader.Find("Sprites/Default")) { name = "Particula_Chispa" };
+            Sprite spark = BuildUtil.S("VFX/impact_0");
+            if (spark != null) material.mainTexture = spark.texture;
+
+            AssetDatabase.CreateAsset(material, path);
+            return material;
+        }
+
+        private static GameObject CreateParticlePrefab(string name, Material material, int burst, float lifetime,
+            float speed, float size, Color color, float destroyDelay)
+        {
+            var go = new GameObject(name);
+            var particles = go.AddComponent<ParticleSystem>();
+
+            ParticleSystem.MainModule main = particles.main;
+            main.duration = 0.4f;
+            main.loop = false;
+            main.playOnAwake = true;
+            main.startLifetime = lifetime;
+            main.startSpeed = speed;
+            main.startSize = size;
+            main.startColor = color;
+            main.simulationSpace = ParticleSystemSimulationSpace.World;
+            main.maxParticles = 120;
+
+            ParticleSystem.EmissionModule emission = particles.emission;
+            emission.enabled = true;
+            emission.rateOverTime = 0f;
+            emission.SetBursts(new[] { new ParticleSystem.Burst(0f, (short)burst) });
+
+            ParticleSystem.ShapeModule shape = particles.shape;
+            shape.enabled = true;
+            shape.shapeType = ParticleSystemShapeType.Sphere;
+            shape.radius = 0.08f;
+
+            var renderer = go.GetComponent<ParticleSystemRenderer>();
+            renderer.sharedMaterial = material;
+            renderer.sortingLayerName = "VFX";
+            renderer.sortingOrder = 30;
+
+            var destroy = go.AddComponent<VFXAutoDestroy>();
+            Binder.Set(destroy, "delay", destroyDelay);
+
+            return BuildUtil.SavePrefab(go, name);
+        }
 
         private static void BuildMenu()
         {
@@ -708,6 +846,34 @@ namespace SlugLab.EditorTools
                 GoalX = 40,
                 Sign = "LAB 09 - CACERIA DE BUGS\n\nAbre Assets/_Curso/Bugs, activa el define\nBUG_HUNT y corrige los 4 scripts hasta\nque sus tests pasen."
             });
+
+            BuildLevel(assets, new LevelSpec
+            {
+                Name = "Lab_10_VFX",
+                Width = 34,
+                PlayerStart = new Vector3(2f, 1.2f, 0f),
+                Sign = "LAB 10 - VFX Y SHADERS\n\nLos tres soldados usan el mismo shader con\ndistinto Flash Amount. El granadero tiene\nDissolve Amount. Las particulas son VFX.\nPrueba a cambiar los valores en el material.",
+                Decorate = _ =>
+                {
+                    for (int i = 0; i < assets.FlashMaterials.Length; i++)
+                    {
+                        var dummy = BuildUtil.NewSprite($"Blanco_{i}", BuildUtil.S("Enemigos/soldier_idle_0"), "Enemy", "Personajes", 6);
+                        dummy.transform.position = new Vector3(9f + i * 3f, 0.5f, 0f);
+                        dummy.GetComponent<SpriteRenderer>().sharedMaterial = assets.FlashMaterials[i];
+
+                        var box = dummy.AddComponent<BoxCollider2D>();
+                        box.size = new Vector2(0.7f, 1.2f);
+                        box.offset = new Vector2(0f, 0.6f);
+                    }
+
+                    var dissolve = BuildUtil.NewSprite("Disolucion", BuildUtil.S("Enemigos/grenadier_idle_0"), "Enemy", "Personajes", 6);
+                    dissolve.transform.position = new Vector3(19f, 0.5f, 0f);
+                    dissolve.GetComponent<SpriteRenderer>().sharedMaterial = assets.DissolveMaterial;
+
+                    BuildUtil.Place(assets.VfxChispas, new Vector3(23f, 1f, 0f));
+                    BuildUtil.Place(assets.VfxExplosion, new Vector3(27f, 1.2f, 0f));
+                }
+            });
         }
 
         private static void BuildLevel(GameAssets assets, LevelSpec spec)
@@ -774,6 +940,8 @@ namespace SlugLab.EditorTools
                 BuildUtil.AddInstructionSign(new Vector3(spec.PlayerStart.x, 2.6f, 0f), spec.Sign);
             }
 
+            spec.Decorate?.Invoke(spec.PlayerStart);
+
             BuildUtil.SaveScene(scene, spec.Name);
         }
 
@@ -788,7 +956,7 @@ namespace SlugLab.EditorTools
             {
                 "Menu", "Nivel1_Cantina", "Nivel2_Jefe",
                 "Lab_01_Sprites", "Lab_02_Animacion", "Lab_03_Fisica", "Lab_04_Combate",
-                "Lab_05_IA", "Lab_06_Niveles", "Lab_07_UI", "Lab_08_Jefe", "Lab_09_Bugs"
+                "Lab_05_IA", "Lab_06_Niveles", "Lab_07_UI", "Lab_08_Jefe", "Lab_09_Bugs", "Lab_10_VFX"
             };
 
             var list = new List<EditorBuildSettingsScene>();

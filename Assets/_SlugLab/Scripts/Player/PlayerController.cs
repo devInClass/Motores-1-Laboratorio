@@ -66,6 +66,9 @@ namespace SlugLab.Player
         public int Facing { get; private set; } = 1;
         public float HorizontalInput { get; private set; }
         public Vector2 Velocity => _rb != null ? _rb.linearVelocity : Vector2.zero;
+
+        /// <summary>Velocidad horizontal normalizada 0–1 (la usa el blend tree).</summary>
+        public float SpeedNormalized => _rb == null ? 0f : Mathf.Clamp01(Mathf.Abs(_rb.linearVelocity.x) / Mathf.Max(0.01f, runSpeed));
         public bool IsAlive => _damageable != null && _damageable.IsAlive;
         public Damageable Damageable => _damageable;
 

@@ -21,7 +21,7 @@ namespace SlugLab.Tests.PlayMode
         {
             "Menu", "Nivel1_Cantina", "Nivel2_Jefe", "Lab_01_Sprites", "Lab_02_Animacion",
             "Lab_03_Fisica", "Lab_04_Combate", "Lab_05_IA", "Lab_06_Niveles", "Lab_07_UI",
-            "Lab_08_Jefe", "Lab_09_Bugs"
+            "Lab_08_Jefe", "Lab_09_Bugs", "Lab_10_VFX"
         };
 
         [UnityTest]

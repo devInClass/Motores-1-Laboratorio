@@ -749,23 +749,36 @@ namespace SlugLab.EditorTools
             return EditorSceneManager.NewScene(NewSceneSetup.EmptyScene, NewSceneMode.Single);
         }
 
+        /// <summary>
+        /// Cartel de instrucciones. Se dibuja en <b>Screen Space Overlay</b>:
+        /// un canvas en World Space queda detrás de los sprites en URP 2D y el
+        /// texto se vuelve ilegible (o invisible) según la profundidad.
+        /// </summary>
         public static void AddInstructionSign(Vector3 position, string message)
         {
-            var go = new GameObject("Cartel_Instrucciones");
-            go.transform.position = position;
+            Canvas canvas = CreateCanvas("Cartel_Instrucciones");
+            canvas.sortingOrder = 40;
+            canvas.transform.position = Vector3.zero;
 
-            var canvas = new GameObject("Texto", typeof(RectTransform), typeof(Canvas)).GetComponent<Canvas>();
-            canvas.transform.SetParent(go.transform, false);
-            canvas.renderMode = RenderMode.WorldSpace;
-            canvas.sortingOrder = 60;
-            var rect = (RectTransform)canvas.transform;
-            rect.sizeDelta = new Vector2(900f, 260f);
-            rect.localScale = Vector3.one * 0.01f;
+            Image panel = NewImage(canvas.transform, "Panel", null, new Color(0.03f, 0.04f, 0.08f, 0.86f));
+            Place(panel, new Vector2(0.5f, 0f), new Vector2(0.5f, 0f), new Vector2(0.5f, 0f),
+                new Vector2(0f, 34f), new Vector2(1120f, 200f));
 
-            Text text = NewText(canvas.transform, "Mensaje", message, 30, TextAnchor.UpperLeft, new Color(1f, 0.96f, 0.8f));
-            Place(text, Vector2.zero, Vector2.one, new Vector2(0f, 1f), Vector2.zero, Vector2.zero);
-            ((RectTransform)text.transform).offsetMin = new Vector2(12f, 12f);
-            ((RectTransform)text.transform).offsetMax = new Vector2(-12f, -12f);
+            Image strip = NewImage(panel.transform, "Franja", null, new Color(0.45f, 0.9f, 0.75f, 0.95f));
+            Place(strip, new Vector2(0f, 1f), new Vector2(1f, 1f), new Vector2(0.5f, 1f),
+                new Vector2(0f, 0f), new Vector2(0f, 4f));
+
+            Text text = NewText(panel.transform, "Mensaje", message, 30, TextAnchor.MiddleLeft,
+                new Color(0.96f, 0.98f, 0.86f));
+            text.horizontalOverflow = HorizontalWrapMode.Wrap;
+            text.lineSpacing = 1.1f;
+
+            var rect = (RectTransform)text.transform;
+            rect.anchorMin = Vector2.zero;
+            rect.anchorMax = Vector2.one;
+            rect.pivot = new Vector2(0.5f, 0.5f);
+            rect.offsetMin = new Vector2(30f, 18f);
+            rect.offsetMax = new Vector2(-30f, -18f);
         }
     }
 }

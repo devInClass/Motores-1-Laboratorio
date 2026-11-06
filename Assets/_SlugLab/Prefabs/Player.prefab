@@ -160,37 +160,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: SlugLab.Runtime::SlugLab.Combat.ProjectilePool
   prefab: {fileID: 9047142949508492268, guid: 9521516c3393c4e4483dfe8eda44ef52, type: 3}
   prewarm: 24
---- !u!1 &3571068340306176662
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 7200006801956028471}
-  m_Layer: 0
-  m_Name: Muzzle
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &7200006801956028471
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3571068340306176662}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0.62, y: 0.8, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 7225386016751116145}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &4965509752787409310
 GameObject:
   m_ObjectHideFlags: 0
@@ -328,7 +297,6 @@ Transform:
   m_Children:
   - {fileID: 3929367601141477257}
   - {fileID: 6616244534040984298}
-  - {fileID: 7200006801956028471}
   - {fileID: 8139459868020453489}
   - {fileID: 4733274197049828880}
   m_Father: {fileID: 0}
@@ -509,10 +477,11 @@ MonoBehaviour:
   input: {fileID: 5347700733275419067}
   controller: {fileID: 4759855864835819622}
   animator: {fileID: 5267138640260441566}
-  muzzle: {fileID: 7200006801956028471}
   projectilePool: {fileID: 3524776563735865806}
   meleeHitbox: {fileID: 438101348000379345}
   startingWeapon: {fileID: 11400000, guid: 5d00debef8283834b8be330b99c506e6, type: 2}
+  muzzleHeight: 0.8
+  muzzleDistance: 0.7
   meleeActiveTime: 0.12
   meleeCooldown: 0.4
   meleeOffset: 0.75
