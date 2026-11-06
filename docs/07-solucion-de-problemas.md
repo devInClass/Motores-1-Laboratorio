@@ -63,6 +63,18 @@
 | Pantalla negra al abrir el `.exe` | Escena inicial incorrecta | `File → Build Settings` → ordena `Menu` primero. |
 | No compila en WebGL | Audio o hilos no soportados | Prueba *Windows* primero; WebGL requiere ajustes. |
 
+## Android y WebGL
+
+| Síntoma | Causa | Solución |
+|---|---|---|
+| El menú de build WebGL falla | Falta el módulo WebGL | Instalarlo desde Unity Hub. |
+| WebGL se queda en negro | Brotli sin fallback | Activar *Decompression Fallback*. |
+| En el teléfono no hay controles | `MobileControls` no se creó | Comprobar `Application.isMobilePlatform` y que la escena tenga `PlayerInput`. |
+| El personaje se mueve solo al cambiar de escena | Entrada virtual sin limpiar | `VirtualInput.Reset()` (ya está en `PlatformBootstrap`). |
+| El HUD queda bajo el notch | Falta el contenedor de área segura | Verificar `SafeAreaFitter` en el canvas. |
+| La cámara muestra el borde del nivel en 20:9 | Límites viejos | Regenerar escenas con **Slug Lab → 3**. |
+| Android no compila | Faltan SDK/NDK | Reinstalar el módulo Android con *SDK & NDK Tools*. |
+
 ## Cuando nada funciona
 
 1. Cierra Unity.

@@ -2,6 +2,28 @@
 
 Todas las versiones relevantes del material del curso.
 
+## [1.2.0] · 2026-11-06
+
+### Añadido
+
+- **Soporte Android y WebGL**: capa de entrada virtual (`VirtualInput`),
+  joystick y botones táctiles que se crean solo en móvil (`MobileControls`),
+  y prueba en escritorio dentro de `Lab_07_UI`.
+- **Cámara adaptable**: los límites se calculan con el ancho visible real
+  (`camera.aspect`), así un teléfono 20:9 no muestra el vacío del nivel.
+- **Área segura** para el HUD (notch y barra de gestos).
+- **`PlatformBootstrap`**: 60 FPS, sin vsync y pantalla encendida en móvil.
+- Menús **5. Configurar Android y WebGL**, **6. Build Android (APK)** y
+  **7. Build WebGL**, con ARM64 + IL2CPP y Brotli con *decompression fallback*.
+- Guía [`docs/08-multiplataforma.md`](docs/08-multiplataforma.md).
+- Pruebas TC-41 a TC-44 (48 automatizadas en total).
+
+### Cambiado
+
+- `PlayerInput` suma teclado + entrada táctil y desactiva el ratón en móvil,
+  para que tocar la pantalla no dispare sin querer.
+- El audio de `Resources` pasa de PCM a **Vorbis** (builds más ligeros).
+
 ## [1.1.0] · 2026-11-06
 
 ### Añadido

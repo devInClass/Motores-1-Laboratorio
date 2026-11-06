@@ -9,7 +9,7 @@ Los IDs automáticos coinciden con el nombre del método: `TC07_FirstShot_IsAllo
 
 ---
 
-## Pruebas automatizadas (42)
+## Pruebas automatizadas (48)
 
 ### Vida y daño · `Tests/EditMode/HealthTests.cs`
 
@@ -87,6 +87,12 @@ Los IDs automáticos coinciden con el nombre del método: `TC07_FirstShot_IsAllo
 | TC-39 | `ElCartelDeInstruccionesSeDibujaEnOverlay` | El cartel es Screen Space Overlay y tiene fuente (bug de texto invisible). |
 | TC-40 | `ElAnimatorDelJugadorUsaDosBlendTrees` | Locomotion 1D y Aim 2D con 10 hijos. |
 | TC-40b | `ExistenLosParametrosQueUsaElCodigo` | No falta ningún parámetro del Animator. |
+| TC-41 | `LaCamaraSeAjustaAlAnchoVisibleDeCadaPantalla` | La cámara respeta 16:9 y 20:9. |
+| TC-41b | `EnUnNivelMasEstrechoQueLaPantallaLaCamaraSeCentra` | Niveles angostos se centran. |
+| TC-42 | `LosControlesTactilesSeConstruyenYResponden` | Joystick y botones escriben en `VirtualInput`. |
+| TC-43 | `LaEntradaVirtualRegistraUnaSolaPulsacion` | Un toque = un salto. |
+| TC-43b | `ResetLimpiaTodo` | Al cambiar de escena no queda entrada pegada. |
+| TC-44 | `ElHUDUsaAreaSegura` | El HUD respeta el notch. |
 
 ---
 

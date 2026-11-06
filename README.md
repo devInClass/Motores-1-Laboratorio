@@ -110,6 +110,14 @@ slug-lab/
 └─ .github/              # plantillas de issue y PR
 ```
 
+## Compilar para Windows, Android y WebGL
+
+- **Windows:** `File → Build Settings → Windows` o el build por defecto.
+- **Android:** `Slug Lab → 6. Build Android (APK)` (requiere el módulo Android, ya instalado).
+- **WebGL:** `Slug Lab → 7. Build WebGL` (requiere instalar *WebGL Build Support* en Unity Hub).
+
+En móvil aparecen joystick y botones automáticamente; en el editor se prueban en `Lab_07_UI`. Detalle en [`docs/08-multiplataforma.md`](docs/08-multiplataforma.md).
+
 ## Regenerar el contenido base
 
 El arte y el audio son **placeholder generados por código** para que el proyecto pese poco y sea reproducible:

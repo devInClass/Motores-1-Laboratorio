@@ -19,7 +19,7 @@ Que el juego salga de Unity y llegue a alguien. Un proyecto que solo corre en el
 
 | Sesión | Tema | Práctica |
 |---|---|---|
-| 41 | Build y publicación | Generar `.exe`, probarlo en otra máquina y subirlo a itch.io |
+| 41 | Build y publicación | `.exe`, APK de Android y WebGL; subir a itch.io |
 | 42 | Ensayo | Demo day y revisión cruzada |
 
 ## Práctica guiada
@@ -43,6 +43,8 @@ Entrega: build jugable, repositorio limpio, `reporte-pruebas.md`, GIF y ficha de
 | TC-1002 | Resolución | Se ve bien en 1920×1080 y 1280×720 |
 | TC-1003 | Sin errores | Consola vacía al jugar |
 | TC-1004 | Cierre completo | Menú → nivel → jefe → victoria |
+| TC-1005 | Android | El APK arranca en horizontal, con joystick y botones |
+| TC-1006 | WebGL | Carga en el navegador y el audio arranca tras el clic |
 
 ## Errores frecuentes
 

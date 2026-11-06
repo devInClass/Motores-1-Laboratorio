@@ -2,51 +2,46 @@
 
 Nota para retomar el trabajo sin releer toda la conversación.
 
-## Estado actual (verificado)
+## Estado actual
 
-- Repositorio en `slug-lab/`, rama `main`, tag `v1.1.0`.
+- Repositorio en `slug-lab/`, rama `main`, tag **v1.2.0**.
 - Unity **6000.3.10f1** (URP 2D, Input Manager clásico).
-- **34/34** pruebas EditMode y **8/8** PlayMode en verde.
+- **38/38** pruebas EditMode y **10/10** PlayMode en verde (48 en total).
 - 13 escenas: menú, 2 niveles, 10 laboratorios.
-- Animator del jugador con **blend tree 1D** de locomoción y **blend tree 2D**
-  de apuntado (5 direcciones × de pie/corriendo).
-- Módulo **M11 · VFX y shaders** con `Lab_10_VFX`, shader `SpriteFlash`
-  (flash + dissolve) y partículas.
-- 4 bugs de la cacería con tests que se activan con `BUG_HUNT`.
+- Animator del jugador con blend tree 1D de locomoción y 2D de apuntado.
+- Módulo **M11 · VFX y shaders** con `Lab_10_VFX` (flash, dissolve, partículas).
+- **Soporte Android y WebGL**: entrada táctil, cámara adaptable, área segura,
+  audio Vorbis y menús de build (5, 6 y 7).
 
-## Corregido en esta sesión
+## Verificado en esta ronda
 
-1. **Disparo atorado:** las balas se instanciaban como hijas del jugador y
-   heredaban su movimiento. Ahora viven en un contenedor en la raíz.
-2. **Cartel invisible:** era un canvas World Space detrás de los sprites.
-   Ahora es Screen Space Overlay.
-3. **Pose de disparo congelada:** el trigger `Shoot` bloqueaba la animación;
-   se reemplazó por el blend tree de apuntado.
+1. Compila sin errores y regenera las 13 escenas.
+2. Suites EditMode (38) y PlayMode (10) en verde.
+3. La configuración de Android/WebGL se aplica: horizontal, ARMv7 + ARM64,
+   IL2CPP, API 25 y Brotli con fallback.
+4. **Build de Android: falla en este equipo** con `Burst internal compiler error:
+   Acceso denegado` (`bcl.exe`, código 3). Es un bloqueo de permisos del
+   compilador Burst, no del proyecto: la build llega hasta Gradle/IL2CPP.
+   Probar en un equipo de laboratorio limpio o desactivar *Burst AOT Settings*.
+5. **WebGL no se pudo compilar**: el módulo *WebGL Build Support* no está
+   instalado en este equipo. El menú muestra un error claro si se intenta.
 
-## Lo que falta (orden sugerido)
+## Lo que falta
 
-1. **Publicar en GitHub** (requiere credenciales del docente):
+1. **Instalar WebGL Build Support** en Unity Hub y ejecutar
+   **Slug Lab → 7. Build WebGL**.
+2. **Probar en un teléfono real**: joystick, botones, notch, rendimiento y
+   `adb logcat` sin errores. En el editor los controles se prueban en `Lab_07_UI`.
+3. **Publicar en GitHub**:
    ```bash
-   cd slug-lab
-   git remote add origin https://github.com/TU-USUARIO/slug-lab.git
+   git remote add origin https://github.com/TU-USUARIO/Motores1.git
    git push -u origin main --tags
    ```
-   Marcar el repositorio como *Template* para que cada alumno cree su copia.
-
-2. **Probar el blend tree en editor con gráficos** (yo solo pude validarlo con
-   pruebas estructurales y en batchmode). Abrir `Lab_02_Animacion`, mantener
-   `↑`, `↑+D`, `D`, `↓+D` en el aire y `↓`, y comprobar que la pose mezcla sin
-   saltos. Ajustar posiciones del blend tree si alguna diagonal se ve rara.
-
-3. **Revisar el calendario** contra el programa oficial: M11 ocupa la sesión 35
+   Crear el repositorio vacío y marcarlo como *Template*.
+4. **Revisar el calendario** contra el programa oficial: M11 ocupa la sesión 35
    (21 de abril), el Parcial 2 pasó al viernes 23 de abril y M10 quedó en dos
    sesiones (5 y 7 de mayo).
-
-4. **Build de Windows** y prueba en una máquina sin Unity.
-
-5. **Opcional:** CI con `game-ci` (necesita licencia de Unity como secreto).
-
-6. **Opcional:** arte propio del docente para el juego de referencia.
+5. **Opcional:** compresión ASTC para sprites grandes en Android.
 
 ## Cómo reanudar
 

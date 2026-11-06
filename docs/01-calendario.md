@@ -72,7 +72,7 @@
 | 38 | mié 28 abr | Telegrafía y *readability*. | Ataques legibles |
 | 39 | vie 30 abr | Barra de jefe y *feedback* de fase. | HUD de jefe |
 | 40 | lun 3 may | *Playtesting* y balance. | Ajustes por pruebas |
-| 41 | mié 5 may | Build final, *itch.io* y créditos. | Build publicado |
+| 41 | mié 5 may | Build Android/WebGL, *itch.io* y créditos. | Build publicado |
 | 42 | vie 7 may | Ensayo de demo day y revisión cruzada. | Checklist final |
 | — | **vie 14 may** | **Entrega final y demo day** | Juego + reporte + presentación |
 

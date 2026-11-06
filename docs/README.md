@@ -10,6 +10,7 @@
 | [`05-arte-y-animacion.md`](05-arte-y-animacion.md) | Especificación de sprites, animaciones y exportación. |
 | [`06-flujo-git.md`](06-flujo-git.md) | Ramas, commits, PR y conflictos de escenas. |
 | [`07-solucion-de-problemas.md`](07-solucion-de-problemas.md) | Los errores que realmente aparecen en clase. |
+| [`08-multiplataforma.md`](08-multiplataforma.md) | Builds de Android y WebGL, controles táctiles y aspecto. |
 | [`modulos/`](modulos/) | Un README por módulo, con plan de clase y retos. |
 
 ## Orden de lectura recomendado
