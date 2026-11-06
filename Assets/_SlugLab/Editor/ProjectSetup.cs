@@ -1,5 +1,8 @@
+using System.IO;
 using System.Linq;
 using UnityEditor;
+using UnityEditor.Build;
+using UnityEditor.Build.Reporting;
 using UnityEngine;
 
 namespace SlugLab.EditorTools
@@ -32,8 +35,35 @@ namespace SlugLab.EditorTools
             ConfigureLayers();
             ConfigureSortingLayers();
             ConfigurePlayerSettings();
+            ConfigurePlatforms();
             ReimportArt();
-            Debug.Log("[Slug Lab] Proyecto configurado: tags, capas, sorting layers y ajustes de arte.");
+            Debug.Log("[Slug Lab] Proyecto configurado: tags, capas, sorting layers, plataformas y arte.");
+        }
+
+        /// <summary>
+        /// Deja listo Android y WebGL: horizontal, ARM64 + IL2CPP y Brotli con
+        /// fallback para que funcione en itch.io sin tocar el servidor.
+        /// </summary>
+        [MenuItem("Slug Lab/5. Configurar Android y WebGL", priority = 5)]
+        public static void ConfigurePlatforms()
+        {
+            PlayerSettings.defaultInterfaceOrientation = UIOrientation.LandscapeLeft;
+            PlayerSettings.allowedAutorotateToPortrait = false;
+            PlayerSettings.allowedAutorotateToPortraitUpsideDown = false;
+            PlayerSettings.allowedAutorotateToLandscapeLeft = true;
+            PlayerSettings.allowedAutorotateToLandscapeRight = true;
+
+            PlayerSettings.Android.targetArchitectures = AndroidArchitecture.ARMv7 | AndroidArchitecture.ARM64;
+            PlayerSettings.Android.minSdkVersion = AndroidSdkVersions.AndroidApiLevel25;
+            PlayerSettings.SetScriptingBackend(NamedBuildTarget.Android, ScriptingImplementation.IL2CPP);
+
+            PlayerSettings.WebGL.compressionFormat = WebGLCompressionFormat.Brotli;
+            PlayerSettings.WebGL.decompressionFallback = true;
+
+            PlayerSettings.resizableWindow = true;
+            PlayerSettings.runInBackground = true;
+
+            Debug.Log("[Slug Lab] Plataformas listas: landscape, Android ARM64 + IL2CPP, WebGL Brotli con fallback.");
         }
 
         private static SerializedObject TagManager
@@ -140,8 +170,7 @@ namespace SlugLab.EditorTools
         }
 
         [MenuItem("Slug Lab/2. Verificar configuración", priority = 2)]
-        public static void Verify()
-        {
+        public static void Verify()        {
             string missing = string.Empty;
 
             foreach (string tag in RequiredTags)
@@ -154,6 +183,58 @@ namespace SlugLab.EditorTools
                 Debug.Log("[Slug Lab] Configuración correcta.");
             else
                 Debug.LogWarning("[Slug Lab] Falta configurar: " + missing);
+        }
+
+        // ------------------------------------------------------------------
+        // Builds
+        // ------------------------------------------------------------------
+
+        [MenuItem("Slug Lab/6. Build Android (APK)", priority = 6)]
+        public static void BuildAndroid() => Build(BuildTarget.Android, "Builds/Android/SlugLab.apk");
+
+        [MenuItem("Slug Lab/7. Build WebGL", priority = 7)]
+        public static void BuildWebGL() => Build(BuildTarget.WebGL, "Builds/WebGL");
+
+        private static void Build(BuildTarget target, string relativePath)
+        {
+            ConfigurePlatforms();
+
+            string fullPath = Path.Combine(Directory.GetCurrentDirectory(), relativePath);
+            string directory = target == BuildTarget.Android ? Path.GetDirectoryName(fullPath) : fullPath;
+            if (!string.IsNullOrEmpty(directory)) Directory.CreateDirectory(directory);
+
+            var options = new BuildPlayerOptions
+            {
+                scenes = EnabledScenes(),
+                locationPathName = fullPath,
+                target = target,
+                options = BuildOptions.None
+            };
+
+            try
+            {
+                BuildReport report = BuildPipeline.BuildPlayer(options);
+                long megabytes = (long)(report.summary.totalSize / (1024UL * 1024UL));
+
+                if (report.summary.result == BuildResult.Succeeded)
+                    Debug.Log($"[Slug Lab] Build {target} OK: {relativePath} ({megabytes} MB).");
+                else
+                    Debug.LogError($"[Slug Lab] Build {target} falló: {report.summary.result} " +
+                                   $"({report.summary.totalErrors} errores).");
+            }
+            catch (System.Exception exception)
+            {
+                Debug.LogError($"[Slug Lab] No se pudo compilar {target}. " +
+                               $"¿Instalaste el módulo en Unity Hub? Detalle: {exception.Message}");
+            }
+        }
+
+        private static string[] EnabledScenes()
+        {
+            return EditorBuildSettings.scenes
+                .Where(scene => scene.enabled)
+                .Select(scene => scene.path)
+                .ToArray();
         }
     }
 }

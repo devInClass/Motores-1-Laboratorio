@@ -1,4 +1,5 @@
 using SlugLab.Core;
+using SlugLab.Player;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -26,7 +27,8 @@ namespace SlugLab.UI
 
         private void Update()
         {
-            if (Input.GetKeyDown(KeyCode.Escape) && !IsGameOver()) Toggle();
+            bool pressed = Input.GetKeyDown(KeyCode.Escape) || VirtualInput.ConsumePausePressed();
+            if (pressed && !IsGameOver()) Toggle();
         }
 
         private static bool IsGameOver()

@@ -415,6 +415,7 @@ MonoBehaviour:
   pauseKey: 27
   reloadKey: 114
   useMouseButtons: 1
+  useVirtualInput: 1
 --- !u!114 &4759855864835819622
 MonoBehaviour:
   m_ObjectHideFlags: 0

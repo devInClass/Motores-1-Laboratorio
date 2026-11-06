@@ -62,8 +62,9 @@ namespace SlugLab.EditorTools
 
             AudioImporter importer = (AudioImporter)assetImporter;
             AudioImporterSampleSettings settings = importer.defaultSampleSettings;
-            settings.loadType = AudioClipLoadType.DecompressOnLoad;
-            settings.compressionFormat = AudioCompressionFormat.PCM;
+            settings.loadType = AudioClipLoadType.CompressedInMemory;
+            settings.compressionFormat = AudioCompressionFormat.Vorbis;
+            settings.quality = 0.7f;
             importer.defaultSampleSettings = settings;
         }
     }

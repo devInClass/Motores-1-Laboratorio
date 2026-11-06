@@ -224,7 +224,8 @@ namespace SlugLab.EditorTools
         // Cámara y fondo
         // ------------------------------------------------------------------
 
-        public static CameraFollow2D CreateCamera(Vector2 minBounds, Vector2 maxBounds)
+        public static CameraFollow2D CreateCamera(Vector2 minBounds, Vector2 maxBounds,
+            float levelMinX = 0f, float levelMaxX = 40f)
         {
             var go = new GameObject("Main Camera");
             go.tag = "MainCamera";
@@ -245,6 +246,9 @@ namespace SlugLab.EditorTools
             Binder.Set(follow, "minBounds", minBounds);
             Binder.Set(follow, "maxBounds", maxBounds);
             Binder.Set(follow, "orthographicSize", CameraSize);
+            Binder.Set(follow, "useLevelBounds", true);
+            Binder.Set(follow, "levelMinX", levelMinX);
+            Binder.Set(follow, "levelMaxX", levelMaxX);
             return follow;
         }
 
@@ -628,23 +632,30 @@ namespace SlugLab.EditorTools
 
             var hud = canvas.gameObject.AddComponent<HUDController>();
 
+            RectTransform safeArea = Rect("SafeArea", canvas.transform);
+            safeArea.anchorMin = Vector2.zero;
+            safeArea.anchorMax = Vector2.one;
+            safeArea.offsetMin = Vector2.zero;
+            safeArea.offsetMax = Vector2.zero;
+            safeArea.gameObject.AddComponent<SafeAreaFitter>();
+
             // Vida (5 corazones)
             var pips = new Image[5];
             for (int i = 0; i < pips.Length; i++)
             {
-                Image pip = NewImage(canvas.transform, $"Vida_{i}", S("UI/pip_full"), Color.white);
+                Image pip = NewImage(safeArea, $"Vida_{i}", S("UI/pip_full"), Color.white);
                 Place(pip, new Vector2(0f, 1f), new Vector2(0f, 1f), new Vector2(0f, 1f),
                     new Vector2(48f + i * 44f, -40f), new Vector2(38f, 38f));
                 pips[i] = pip;
             }
 
-            Text lives = NewText(canvas.transform, "Vidas", "x3", 40, TextAnchor.MiddleLeft, new Color(1f, 0.85f, 0.85f));
+            Text lives = NewText(safeArea, "Vidas", "x3", 40, TextAnchor.MiddleLeft, new Color(1f, 0.85f, 0.85f));
             Place(lives, new Vector2(0f, 1f), new Vector2(0f, 1f), new Vector2(0f, 1f), new Vector2(48f + 5 * 44f + 8f, -40f), new Vector2(160f, 44f));
 
-            Text score = NewText(canvas.transform, "Puntos", "000000", 44, TextAnchor.MiddleRight, new Color(1f, 0.92f, 0.6f));
+            Text score = NewText(safeArea, "Puntos", "000000", 44, TextAnchor.MiddleRight, new Color(1f, 0.92f, 0.6f));
             Place(score, new Vector2(1f, 1f), new Vector2(1f, 1f), new Vector2(1f, 1f), new Vector2(-40f, -40f), new Vector2(320f, 44f));
 
-            Text ammo = NewText(canvas.transform, "Municion", "30", 34, TextAnchor.MiddleLeft, new Color(0.85f, 0.95f, 1f));
+            Text ammo = NewText(safeArea, "Municion", "30", 34, TextAnchor.MiddleLeft, new Color(0.85f, 0.95f, 1f));
             Place(ammo, new Vector2(0f, 1f), new Vector2(0f, 1f), new Vector2(0f, 1f), new Vector2(48f, -92f), new Vector2(200f, 40f));
 
             Binder.Set(hud, "player", player);
@@ -658,7 +669,7 @@ namespace SlugLab.EditorTools
             BossHealthBar bossBar = null;
             if (boss != null)
             {
-                var barRoot = Rect("Barra_Jefe", canvas.transform);
+                var barRoot = Rect("Barra_Jefe", safeArea);
                 Place(barRoot, new Vector2(0.5f, 1f), new Vector2(0.5f, 1f), new Vector2(0.5f, 1f), new Vector2(0f, -40f), new Vector2(900f, 90f));
 
                 Image background = NewImage(barRoot, "Fondo", null, new Color(0.05f, 0.05f, 0.08f, 0.85f));

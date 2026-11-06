@@ -3,13 +3,15 @@ using UnityEngine;
 namespace SlugLab.Player
 {
     /// <summary>
-    /// Lectura de teclado y ratón. Está aislada en su propio componente para que
-    /// el resto del código no dependa de Unity: si mañana cambiamos a gamepad o
-    /// a Input Actions, solo se toca este archivo.
+    /// Lectura de teclado, ratón y controles táctiles. Es la única puerta de
+    /// entrada del jugador: si mañana cambiamos a gamepad, solo se toca este
+    /// archivo.
     /// </summary>
     /// <remarks>
     /// Usamos el Input Manager clásico (<c>Input.GetAxisRaw</c>, <c>Input.GetKey</c>)
     /// porque funciona en cualquier laboratorio sin configurar paquetes.
+    /// En móvil se suman las órdenes de <see cref="VirtualInput"/> y se apaga el
+    /// ratón para que tocar la pantalla no dispare sin querer.
     /// </remarks>
     [DefaultExecutionOrder(-100)]
     public class PlayerInput : MonoBehaviour
@@ -24,6 +26,9 @@ namespace SlugLab.Player
         [Header("Ratón")]
         [SerializeField] private bool useMouseButtons = true;
 
+        [Header("Entrada táctil")]
+        [SerializeField] private bool useVirtualInput = true;
+
         public float Horizontal { get; private set; }
         public float Vertical { get; private set; }
         public bool JumpPressed { get; private set; }
@@ -37,36 +42,61 @@ namespace SlugLab.Player
         /// <summary>Bloquea la lectura (menús, muerte, cinemáticas).</summary>
         public bool IsLocked { get; set; }
 
+        private void Awake()
+        {
+            if (Application.isMobilePlatform) useMouseButtons = false;
+        }
+
         private void Update()
         {
             if (IsLocked)
             {
-                Horizontal = 0f;
-                Vertical = 0f;
-                JumpPressed = false;
-                JumpHeld = false;
-                FireHeld = false;
-                MeleePressed = false;
-                CrouchHeld = false;
-                PausePressed = false;
-                ReloadPressed = false;
+                Clear();
                 return;
             }
 
-            Horizontal = Input.GetAxisRaw("Horizontal");
-            Vertical = Input.GetAxisRaw("Vertical");
+            float horizontal = Input.GetAxisRaw("Horizontal");
+            float vertical = Input.GetAxisRaw("Vertical");
 
-            JumpPressed = Input.GetKeyDown(jumpKey);
-            JumpHeld = Input.GetKey(jumpKey);
-            CrouchHeld = Vertical < -0.5f || Input.GetKey(KeyCode.LeftControl);
+            if (useVirtualInput)
+            {
+                horizontal = Mathf.Clamp(horizontal + VirtualInput.Horizontal, -1f, 1f);
+                vertical = Mathf.Clamp(vertical + VirtualInput.Vertical, -1f, 1f);
+            }
+
+            Horizontal = horizontal;
+            Vertical = vertical;
+
+            bool virtualJump = useVirtualInput && VirtualInput.ConsumeJumpPressed();
+            bool virtualMelee = useVirtualInput && VirtualInput.ConsumeMeleePressed();
+            bool virtualReload = useVirtualInput && VirtualInput.ConsumeReloadPressed();
+
+            JumpPressed = Input.GetKeyDown(jumpKey) || virtualJump;
+            JumpHeld = Input.GetKey(jumpKey) || (useVirtualInput && VirtualInput.JumpHeld);
+            CrouchHeld = vertical < -0.5f || Input.GetKey(KeyCode.LeftControl) ||
+                         (useVirtualInput && VirtualInput.CrouchHeld);
 
             bool mouseFire = useMouseButtons && Input.GetMouseButton(0);
             bool mouseMelee = useMouseButtons && Input.GetMouseButtonDown(1);
-            FireHeld = Input.GetKey(fireKey) || mouseFire;
-            MeleePressed = Input.GetKeyDown(meleeKey) || mouseMelee;
+            FireHeld = Input.GetKey(fireKey) || mouseFire || (useVirtualInput && VirtualInput.FireHeld);
+            MeleePressed = Input.GetKeyDown(meleeKey) || mouseMelee || virtualMelee;
 
+            // La pausa la consume PauseMenu, para que no se pierda el evento.
             PausePressed = Input.GetKeyDown(pauseKey);
-            ReloadPressed = Input.GetKeyDown(reloadKey);
+            ReloadPressed = Input.GetKeyDown(reloadKey) || virtualReload;
+        }
+
+        private void Clear()
+        {
+            Horizontal = 0f;
+            Vertical = 0f;
+            JumpPressed = false;
+            JumpHeld = false;
+            FireHeld = false;
+            MeleePressed = false;
+            CrouchHeld = false;
+            PausePressed = false;
+            ReloadPressed = false;
         }
     }
 }

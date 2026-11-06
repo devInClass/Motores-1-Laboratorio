@@ -22,6 +22,12 @@ namespace SlugLab.Level
         [SerializeField] private Vector2 minBounds = new Vector2(0f, 4f);
         [SerializeField] private Vector2 maxBounds = new Vector2(40f, 4f);
 
+        [Header("Bordes reales del nivel (mundo)")]
+        [Tooltip("Ajusta la cámara al ancho visible real del dispositivo (móvil, ultrawide).")]
+        [SerializeField] private bool useLevelBounds = true;
+        [SerializeField] private float levelMinX = 0f;
+        [SerializeField] private float levelMaxX = 40f;
+
         [Header("Zoom")]
         [SerializeField] private float orthographicSize = 5.6f;
 
@@ -68,6 +74,31 @@ namespace SlugLab.Level
             maxBounds = max;
         }
 
+        public void SetLevelBounds(float minX, float maxX)
+        {
+            useLevelBounds = true;
+            levelMinX = minX;
+            levelMaxX = maxX;
+        }
+
+        /// <summary>
+        /// Limita el centro de la cámara a los bordes del nivel usando el ancho
+        /// visible real, que depende de la relación de aspecto del dispositivo.
+        /// En un teléfono 20:9 se ve más ancho que en un monitor 16:9.
+        /// </summary>
+        public static float ClampCenterX(float desiredX, float orthographicSize, float aspect,
+            float levelMinX, float levelMaxX)
+        {
+            float halfWidth = Mathf.Max(0.01f, orthographicSize) * Mathf.Max(0.01f, aspect);
+            float min = levelMinX + halfWidth;
+            float max = levelMaxX - halfWidth;
+
+            // Nivel más estrecho que la pantalla: se centra para no mostrar el vacío.
+            if (min > max) return (levelMinX + levelMaxX) * 0.5f;
+
+            return Mathf.Clamp(desiredX, min, max);
+        }
+
         private void LateUpdate()
         {
             if (target == null) return;
@@ -86,7 +117,12 @@ namespace SlugLab.Level
                 target.position.y + offset.y,
                 -10f);
 
-            if (useBounds)
+            if (useLevelBounds)
+            {
+                desired.x = ClampCenterX(desired.x, orthographicSize, _camera.aspect, levelMinX, levelMaxX);
+                if (useBounds) desired.y = Mathf.Clamp(desired.y, minBounds.y, maxBounds.y);
+            }
+            else if (useBounds)
             {
                 desired.x = Mathf.Clamp(desired.x, minBounds.x, maxBounds.x);
                 desired.y = Mathf.Clamp(desired.y, minBounds.y, maxBounds.y);
@@ -100,7 +136,14 @@ namespace SlugLab.Level
         {
             if (target == null) return;
             _basePosition = new Vector3(target.position.x + offset.x, target.position.y + offset.y, -10f);
-            if (useBounds)
+
+            if (useLevelBounds)
+            {
+                float aspect = _camera != null ? _camera.aspect : 16f / 9f;
+                _basePosition.x = ClampCenterX(_basePosition.x, orthographicSize, aspect, levelMinX, levelMaxX);
+                if (useBounds) _basePosition.y = Mathf.Clamp(_basePosition.y, minBounds.y, maxBounds.y);
+            }
+            else if (useBounds)
             {
                 _basePosition.x = Mathf.Clamp(_basePosition.x, minBounds.x, maxBounds.x);
                 _basePosition.y = Mathf.Clamp(_basePosition.y, minBounds.y, maxBounds.y);

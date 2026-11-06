@@ -80,7 +80,7 @@ namespace SlugLab.EditorTools
 
             AssetDatabase.SaveAssets();
             AssetDatabase.Refresh();
-            Debug.Log("[Slug Lab] Juego generado: 2 niveles, menú y 9 laboratorios.");
+            Debug.Log("[Slug Lab] Juego generado: 2 niveles, menú y 10 laboratorios.");
         }
 
         /// <summary>Entrada única para batchmode: genera todo y configura el build.</summary>
@@ -821,7 +821,13 @@ namespace SlugLab.EditorTools
                 Name = "Lab_07_UI",
                 Width = 30,
                 PlayerStart = new Vector3(2f, 1.2f, 0f),
-                Sign = "LAB 07 - INTERFAZ Y FLUJO\n\nPrueba el HUD, la pausa (ESC),\nla muerte y la pantalla final."
+                Sign = "LAB 07 - INTERFAZ Y FLUJO\n\nPrueba el HUD, la pausa (ESC o boton II),\nla muerte y la pantalla final.\nLos controles tactiles se prueban aqui en el editor.",
+                Decorate = _ =>
+                {
+                    var go = new GameObject("ControlesMovilesDemo");
+                    var mobile = go.AddComponent<MobileControls>();
+                    Binder.Set(mobile, "forceOnDesktop", true);
+                }
             });
 
             BuildLevel(assets, new LevelSpec
@@ -886,7 +892,7 @@ namespace SlugLab.EditorTools
             float halfWidth = BuildUtil.CameraSize * 16f / 9f;
             Vector2 min = new Vector2(Mathf.Min(halfWidth, spec.Width * 0.5f), 4f);
             Vector2 max = new Vector2(Mathf.Max(spec.Width - halfWidth, halfWidth), 4f);
-            BuildUtil.CreateCamera(min, max);
+            BuildUtil.CreateCamera(min, max, 0f, spec.Width);
 
             BuildUtil.CreateGround(spec.Width, spec.Gaps);
 

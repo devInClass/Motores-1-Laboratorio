@@ -41,6 +41,9 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/_SlugLab/Scenes/Lab_09_Bugs.unity
     guid: 9eda852e15f105141af429312ca1e5ba
+  - enabled: 1
+    path: Assets/_SlugLab/Scenes/Lab_10_VFX.unity
+    guid: a0fcd69bfdfbb324db57dd57fe21e352
   m_configObjects:
     com.unity.input.settings.actions: {fileID: -944628639613478452, guid: 2bcd2660ca9b64942af0de543d8d7100, type: 3}
   m_UseUCBPForAssetBundles: 0
