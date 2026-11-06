@@ -16,15 +16,16 @@ namespace SlugLab.EditorTools
     {
         public const float PixelsPerUnit = 32f;
 
-        private static readonly string[] BottomPivotFolders =
+        private static readonly string[] CenterPivotFolders =
         {
-            "/Personajes/", "/Enemigos/", "/Jefe/", "/Props/"
+            "/Fondos/", "/UI/", "/VFX/", "/Tiles/"
         };
 
         private void OnPreprocessTexture()
         {
             string path = assetPath.Replace('\\', '/');
-            if (!path.Contains("/_SlugLab/Art/")) return;
+            bool isCourseArt = path.Contains("/_SlugLab/Art/") || path.Contains("/_Curso/MiJuego/Arte/");
+            if (!isCourseArt) return;
 
             TextureImporter importer = (TextureImporter)assetImporter;
 
@@ -40,14 +41,14 @@ namespace SlugLab.EditorTools
 
             TextureImporterSettings settings = new TextureImporterSettings();
             importer.ReadTextureSettings(settings);
-            settings.spriteAlignment = (int)SpriteAlignment.Center;
+            settings.spriteAlignment = (int)SpriteAlignment.BottomCenter;
             settings.spriteMeshType = SpriteMeshType.FullRect;
 
-            foreach (string folder in BottomPivotFolders)
+            foreach (string folder in CenterPivotFolders)
             {
                 if (path.Contains(folder))
                 {
-                    settings.spriteAlignment = (int)SpriteAlignment.BottomCenter;
+                    settings.spriteAlignment = (int)SpriteAlignment.Center;
                     break;
                 }
             }
@@ -58,7 +59,8 @@ namespace SlugLab.EditorTools
         private void OnPreprocessAudio()
         {
             string path = assetPath.Replace('\\', '/');
-            if (!path.Contains("/_SlugLab/Resources/")) return;
+            bool isCourseAudio = path.Contains("/_SlugLab/Resources/") || path.Contains("/_Curso/MiJuego/Audio/");
+            if (!isCourseAudio) return;
 
             AudioImporter importer = (AudioImporter)assetImporter;
             AudioImporterSampleSettings settings = importer.defaultSampleSettings;

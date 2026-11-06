@@ -48,19 +48,22 @@ Si algo falla:
 
 ## 5. Tu primer cambio (10 minutos)
 
-1. Abre `Assets/_SlugLab/Scenes/Laboratorio/Lab_03_Fisica.unity`.
-2. Selecciona el prefab `Player` en la jerarquía.
-3. En el componente `Player Controller`, cambia `Run Speed` de `6.5` a `10`.
-4. Pulsa Play: deberías notar la diferencia.
-5. Guarda la escena y haz commit:
+La regla del curso: **no edites `Assets/_SlugLab/`**. Para experimentar, copia lo que necesites a `Assets/_Curso/MiJuego/`.
+
+1. Duplica `Assets/_SlugLab/Prefabs/Player.prefab` y muévelo a `Assets/_Curso/MiJuego/Prefabs/Player_MiJuego.prefab`.
+2. Duplica `Assets/_SlugLab/Scenes/Laboratorio/Lab_03_Fisica.unity` en `Assets/_Curso/MiJuego/Escenas/MiNivel.unity`.
+3. En `MiNivel`, borra el `Player` y arrastra tu prefab.
+4. En el componente `Player Controller` de **tu** prefab, cambia `Run Speed` de `6.5` a `10`.
+5. Pulsa Play: deberías notar la diferencia.
+6. Guarda y haz commit:
 
 ```bash
 git add .
-git commit -m "M03: ajusto la velocidad de carrera"
+git commit -m "M03: mi escena y mi prefab de jugador"
 git push
 ```
 
-> **Ojo:** si modificas un prefab, el cambio afecta a todas las escenas. Para experimentar sin romper nada, arrastra el prefab a la escena y edita la copia.
+> Este es el flujo de todo el semestre: el material del curso se lee, no se toca; tu juego crece en `MiJuego/`.
 
 ## 6. Cómo se usan los laboratorios
 

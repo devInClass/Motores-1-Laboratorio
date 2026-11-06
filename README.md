@@ -43,6 +43,17 @@ Repositorio del curso para la carrera de **Animación**. El objetivo no es solo 
 | Recargar | `R` | — |
 | Pausa | `Esc` | — |
 
+## Cómo trabaja el alumno
+
+Cada alumno crea **su propio repositorio** a partir de la plantilla y trabaja en
+`Assets/_Curso/MiJuego/`: ahí van sus escenas, prefabs, scripts y arte. El
+material de `Assets/_SlugLab/` se lee y se copia, **no se edita**. Los reportes
+de laboratorio van en `entregas/`.
+
+El flujo completo (crear el repo, clonar, qué tocar y qué no, cómo entregar)
+está en [`docs/06-flujo-git.md`](docs/06-flujo-git.md) y en
+[`Assets/_Curso/MiJuego/README.md`](Assets/_Curso/MiJuego/README.md).
+
 ## Mapa del curso
 
 Son **42 sesiones de 90 minutos** (11 ene – 7 may 2027), dos exámenes parciales y entrega final el **viernes 14 de mayo de 2027**. El detalle día por día está en [`docs/01-calendario.md`](docs/01-calendario.md).
@@ -106,6 +117,7 @@ slug-lab/
 │     └─ Plantillas/
 ├─ docs/                 # calendario, guías, rúbricas, catálogo
 ├─ plantillas/           # entregables en Markdown
+├─ entregas/             # reportes que sube el alumno
 ├─ tools/                # generadores de arte y audio (Python)
 └─ .github/              # plantillas de issue y PR
 ```

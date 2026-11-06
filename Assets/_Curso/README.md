@@ -1,31 +1,42 @@
 # Assets/_Curso
 
-Aquí vive tu trabajo. Nada de lo que hagas en esta carpeta modifica el juego de referencia.
+Tu zona de trabajo. Nada de lo que hagas aquí modifica el juego de referencia.
 
 ```
 _Curso/
-├─ MiJuego/          # tu nivel, tus scripts, tu arte
+├─ MiJuego/          # tu nivel, tus prefabs, tus scripts, tu arte
 │  ├─ Escenas/
+│  ├─ Prefabs/
 │  ├─ Scripts/
 │  ├─ Arte/
 │  ├─ Animaciones/
 │  └─ Audio/
-├─ Bugs/             # cacería de bugs (Módulo 9)
-│  ├─ Scripts/       # aquí corriges
-│  └─ Tests/         # no tocar: son el juez
-└─ Plantillas/
+└─ Bugs/             # cacería de bugs (M11)
+   ├─ Scripts/       # aquí corriges
+   └─ Tests/         # no tocar: son el juez
 ```
 
-## Reglas
+## Tres reglas
 
-1. **No edites** `Assets/_SlugLab/` para tu entrega: es el material base. Si necesitas un cambio, haz una copia en `MiJuego/`.
-2. Tus escenas siempre en `MiJuego/Escenas/`.
-3. Tus sprites, con PPU 32 y pivote abajo-centro.
-4. Nombres en minúsculas y sin espacios.
+1. **No edites `Assets/_SlugLab/`.** Es el material del curso y el docente puede
+   actualizarlo. Si necesitas cambiar un prefab, un script o un valor, **duplícalo**
+   dentro de `MiJuego/` y trabaja sobre tu copia.
+2. **No edites `Bugs/Tests/`.** Los tests son el criterio de evaluación; solo se
+   corrige el código de `Bugs/Scripts/`.
+3. **Tu juego vive en `MiJuego/`.** Todo lo que entregas tiene que estar ahí o en
+   `entregas/`.
 
-## Empezar tu nivel
+## Primeros pasos
 
-1. Duplica `Assets/_SlugLab/Scenes/Laboratorio/Lab_03_Fisica.unity`.
-2. Guárdala como `MiJuego/Escenas/MiNivel.unity`.
-3. Añádela a `File → Build Settings`.
-4. Reemplaza el `Player` por una copia con tu arte.
+Están detallados en [`MiJuego/README.md`](MiJuego/README.md):
+
+1. Duplica una escena de laboratorio a `MiJuego/Escenas/`.
+2. Duplica el prefab del jugador a `MiJuego/Prefabs/` y reemplaza la instancia.
+3. Pon tus dibujos en `MiJuego/Arte/` (se importan solos con PPU 32).
+4. Añade tu escena a *Build Settings*.
+
+## Nombres
+
+- Carpetas y archivos en minúsculas, sin espacios: `mi_nivel.unity`, `player_garcia.prefab`.
+- Los scripts en `PascalCase`: `MiDisparo.cs`.
+- Si trabajas en equipo, añade el nombre al final para no chocar.

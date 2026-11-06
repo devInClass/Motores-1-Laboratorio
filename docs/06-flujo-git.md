@@ -2,6 +2,79 @@
 
 El objetivo no es solo "guardar el proyecto", sino que cada alumno aprenda el flujo real de un estudio: ramas, commits pequeños y *pull requests*.
 
+## El flujo del alumno, paso a paso
+
+### Modelo de repositorio
+
+| Opción | Cómo se crea | Ventaja | Inconveniente |
+|---|---|---|---|
+| **GitHub Classroom** (recomendado si hay organización) | El docente crea la tarea desde la plantilla | Repos privados por alumno, el docente ve todos | Requiere configurar la organización |
+| **Use this template** | Botón en el repo del docente | Simple y privado si el alumno lo crea privado | Hay que añadir al docente como colaborador |
+| **Fork** | Botón *Fork* | Mantiene el enlace al repo base | El fork de un repo público es público |
+
+En los tres casos el alumno termina con **su propio repositorio** con una copia completa del proyecto Unity.
+
+### Día 0: crear y abrir
+
+1. Acepta la tarea (Classroom) o pulsa **Use this template** → nombre `Motores1-Apellido`.
+2. Clónalo:
+   ```bash
+   git clone https://github.com/TU-USUARIO/Motores1-Apellido.git
+   ```
+3. Ábrelo con Unity **6000.3.10f1** y espera la importación.
+4. Abre `Assets/_SlugLab/Scenes/Juego/Menu.unity` y comprueba que se juega.
+5. Si quieres recibir correcciones del docente, añade su repo como `upstream`:
+   ```bash
+   git remote add upstream https://github.com/PROFE/Motores1.git
+   ```
+
+### Cada sesión
+
+```bash
+git pull                      # si trabajas en otra máquina
+# ... clase: laboratorio y tu juego ...
+git add .
+git commit -m "M03: coyote time y mi escena"
+git push
+```
+
+### Dónde guarda cada cosa
+
+| Qué | Dónde | Se versiona |
+|---|---|---|
+| Escenas propias | `Assets/_Curso/MiJuego/Escenas/` | Sí |
+| Prefabs propios | `Assets/_Curso/MiJuego/Prefabs/` | Sí |
+| Scripts propios | `Assets/_Curso/MiJuego/Scripts/` | Sí |
+| Sprites y animaciones | `Assets/_Curso/MiJuego/Arte/` y `Animaciones/` | Sí |
+| Audio propio | `Assets/_Curso/MiJuego/Audio/` | Sí |
+| Reportes de laboratorio | `entregas/M0X-apellido.md` | Sí |
+| Builds (`.exe`, `.apk`, WebGL) | fuera del repo (itch.io / Drive) | No |
+| Caché de Unity | `Library/`, `Temp/`, `Logs/` | No (ignorado) |
+
+### Actualizaciones del docente
+
+Los cambios del docente llegan a `Assets/_SlugLab/`, `docs/` y `ProjectSettings/`.
+Como el alumno trabaja en `Assets/_Curso/`, el merge es limpio:
+
+```bash
+git fetch upstream
+git merge upstream/main
+```
+
+Si hay conflicto, casi siempre es porque se editó algo de `_SlugLab` que no se
+debía tocar. Regla: **si necesitas cambiar un prefab o un script del curso,
+duplícalo en `MiJuego/`**.
+
+### Entrega
+
+1. Reporte completo en `entregas/`.
+2. Build subido a itch.io (el enlace va en el `README.md`).
+3. Tag:
+   ```bash
+   git tag entrega-final
+   git push --tags
+   ```
+
 ## Lo mínimo por sesión
 
 ```bash
