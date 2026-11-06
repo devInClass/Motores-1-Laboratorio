@@ -1,0 +1,69 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!78 &1
+TagManager:
+  serializedVersion: 3
+  tags:
+  - Player
+  - Enemy
+  - Boss
+  layers:
+  - Default
+  - TransparentFX
+  - Ignore Raycast
+  - 
+  - Water
+  - UI
+  - 
+  - 
+  - Player
+  - Enemy
+  - PlayerAttack
+  - EnemyAttack
+  - Ground
+  - OneWayPlatform
+  - Hazard
+  - Trigger
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  m_SortingLayers:
+  - name: Default
+    uniqueID: 0
+    locked: 0
+  - name: Fondo
+    uniqueID: 35743752
+    locked: 0
+  - name: Parallax
+    uniqueID: 28972225
+    locked: 0
+  - name: Suelo
+    uniqueID: 1931229320
+    locked: 0
+  - name: Props
+    uniqueID: 831152180
+    locked: 0
+  - name: Personajes
+    uniqueID: 152295232
+    locked: 0
+  - name: VFX
+    uniqueID: 1999992730
+    locked: 0
+  - name: UI
+    uniqueID: 1090805748
+    locked: 0
+  m_RenderingLayers:
+  - Default

@@ -1,0 +1,46 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1045 &1
+EditorBuildSettings:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Scenes:
+  - enabled: 1
+    path: Assets/_SlugLab/Scenes/Menu.unity
+    guid: 33db15bbb9f148d4090baf5b07daf263
+  - enabled: 1
+    path: Assets/_SlugLab/Scenes/Nivel1_Cantina.unity
+    guid: 32d3126a26ea79948ab0ab4a5ded4151
+  - enabled: 1
+    path: Assets/_SlugLab/Scenes/Nivel2_Jefe.unity
+    guid: 7be8322d3f7bbd94bb2b2b5d976322e8
+  - enabled: 1
+    path: Assets/_SlugLab/Scenes/Lab_01_Sprites.unity
+    guid: 2d2d6ce0869a80248afc2aaee7650b31
+  - enabled: 1
+    path: Assets/_SlugLab/Scenes/Lab_02_Animacion.unity
+    guid: ab414197dbe852447a7e8b43a0a355c3
+  - enabled: 1
+    path: Assets/_SlugLab/Scenes/Lab_03_Fisica.unity
+    guid: 6d4c20d6d02566147a03aaf0a958c8ff
+  - enabled: 1
+    path: Assets/_SlugLab/Scenes/Lab_04_Combate.unity
+    guid: ed4612c9a16335b4d9ac6e3dd0ca992f
+  - enabled: 1
+    path: Assets/_SlugLab/Scenes/Lab_05_IA.unity
+    guid: d01706d5592a98a4d80bb548edceb965
+  - enabled: 1
+    path: Assets/_SlugLab/Scenes/Lab_06_Niveles.unity
+    guid: fffba23aa8b74bc46975e08d1c3116d3
+  - enabled: 1
+    path: Assets/_SlugLab/Scenes/Lab_07_UI.unity
+    guid: 562ab14fc4ef07a41a463af2620bcaa0
+  - enabled: 1
+    path: Assets/_SlugLab/Scenes/Lab_08_Jefe.unity
+    guid: f793bda07615d324d85d0890f097c6f9
+  - enabled: 1
+    path: Assets/_SlugLab/Scenes/Lab_09_Bugs.unity
+    guid: 9eda852e15f105141af429312ca1e5ba
+  m_configObjects:
+    com.unity.input.settings.actions: {fileID: -944628639613478452, guid: 2bcd2660ca9b64942af0de543d8d7100, type: 3}
+  m_UseUCBPForAssetBundles: 0
