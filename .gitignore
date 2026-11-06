@@ -1,0 +1,44 @@
+# Unity · archivos generados
+[Ll]ibrary/
+[Tt]emp/
+[Oo]bj/
+[Bb]uild/
+[Bb]uilds/
+[Ll]ogs/
+[Uu]ser[Ss]ettings/
+[Mm]emoryCaptures/
+[Rr]ecordings/
+
+# Proyectos e IDE
+*.csproj
+*.unityproj
+*.sln
+*.suo
+*.user
+*.userprefs
+*.pidb
+*.booproj
+*.svd
+*.pdb
+*.mdb
+*.opendb
+*.VC.db
+.vs/
+.idea/
+.vscode/
+
+# Builds y paquetes
+*.apk
+*.aab
+*.unitypackage
+*.app
+sysinfo.txt
+
+# Sistema
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Logs del repositorio (generador, pruebas)
+logs/
+*.log
