@@ -1,0 +1,25 @@
+{
+    "name": "SlugLab.Curso.Bugs.Tests",
+    "rootNamespace": "SlugLab.Curso.Bugs.Tests",
+    "references": [
+        "SlugLab.Curso",
+        "UnityEngine.TestRunner",
+        "UnityEditor.TestRunner"
+    ],
+    "includePlatforms": [
+        "Editor"
+    ],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": true,
+    "precompiledReferences": [
+        "nunit.framework.dll"
+    ],
+    "autoReferenced": false,
+    "defineConstraints": [
+        "UNITY_INCLUDE_TESTS",
+        "BUG_HUNT"
+    ],
+    "versionDefines": [],
+    "noEngineReferences": false
+}
