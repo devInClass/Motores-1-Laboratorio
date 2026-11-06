@@ -4,19 +4,22 @@ Nota para retomar el trabajo sin releer toda la conversación.
 
 ## Estado actual
 
-- Repositorio en `slug-lab/`, rama `main`, tag **v1.2.0**.
+- Repositorio en `slug-lab/`, rama `main`, tag **v1.2.1**.
 - Unity **6000.3.10f1** (URP 2D, Input Manager clásico).
-- **38/38** pruebas EditMode y **10/10** PlayMode en verde (48 en total).
+- **38/38** pruebas EditMode y **12/12** PlayMode en verde (50 en total).
 - 13 escenas: menú, 2 niveles, 10 laboratorios.
 - Animator del jugador con blend tree 1D de locomoción y 2D de apuntado.
 - Módulo **M11 · VFX y shaders** con `Lab_10_VFX` (flash, dissolve, partículas).
 - **Soporte Android y WebGL**: entrada táctil, cámara adaptable, área segura,
   audio Vorbis y menús de build (5, 6 y 7).
+- **Pantalla completa en WebGL** (`FullscreenToggle`) y **pausa automática** al
+  perder el foco en Android/WebGL.
 
 ## Verificado en esta ronda
 
 1. Compila sin errores y regenera las 13 escenas.
-2. Suites EditMode (38) y PlayMode (10) en verde.
+2. Suites EditMode (38) y PlayMode (12) en verde, incluida la pausa automática
+   y el botón de pantalla completa.
 3. La configuración de Android/WebGL se aplica: horizontal, ARMv7 + ARM64,
    IL2CPP, API 25 y Brotli con fallback.
 4. **Build de Android: falla en este equipo** con `Burst internal compiler error:
@@ -55,6 +58,8 @@ Nota para retomar el trabajo sin releer toda la conversación.
 - No borrar ni mover la carpeta `slug-lab/`.
 - No ejecutar `git reset --hard` sin haber commiteado.
 - Los `.meta` de Unity se versionan; no ignorarlos.
+- **Cerrar Unity antes de lanzar builds por batch.** Si queda un editor abierto,
+  los procesos huérfanos bloquean `Library` y Unity aborta sin mensaje claro.
 - Regenerar arte: `python tools/generar_arte.py` (sobrescribe placeholders).
 - Regenerar escenas: menú **Slug Lab → 3. Generar juego completo**.
 

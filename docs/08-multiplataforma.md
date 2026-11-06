@@ -56,6 +56,27 @@ Menú **Slug Lab → 5. Configurar Android y WebGL**. Deja:
 - No uses `System.Threading` ni `Application.Quit` como única salida: en el navegador no funcionan igual.
 - El build pesa más que el de Windows; revisa `Builds/WebGL` antes de subirlo.
 
+## Pantalla completa (WebGL)
+
+En el navegador el juego crea un botón **PANTALLA COMPLETA** en la esquina inferior izquierda (`FullscreenToggle`). Al pulsarlo llama a `Screen.fullScreen` y el texto cambia a **VENTANA**.
+
+- El navegador exige un **gesto del usuario** para entrar a pantalla completa: el clic del botón cuenta como gesto.
+- Si el usuario sale con `Esc`, la etiqueta se actualiza sola cada medio segundo.
+- En el editor se prueba en `Lab_07_UI` (hay una instancia forzada).
+- Solo se crea en WebGL: en Windows y Android no aparece.
+
+## Pausa automática al perder el foco
+
+En **Android** y **WebGL**, `GameFlow` escucha `OnApplicationPause` y `OnApplicationFocus`. Cuando la app va al fondo o la pestaña deja de verse:
+
+1. `Time.timeScale = 0`.
+2. Aparece el menú de pausa.
+3. Se silencia el audio (`AudioListener.pause`).
+
+Al volver, el juego **no se reanuda solo**: el jugador pulsa CONTINUAR. Así una llamada o una notificación no le cuesta la partida.
+
+En escritorio no se activa (alt-tab no pausa), para no interrumpir en el laboratorio.
+
 ## Qué cambia en los scripts (y qué no)
 
 **No cambia:** `PlayerController`, `PlayerCombat`, `EnemyBrain`, `BossController`, `Weapon`, `Damageable`, el HUD, los menús.
@@ -101,4 +122,6 @@ Si un nivel es más estrecho que la pantalla, la cámara se centra para no mostr
 - [ ] Joystick y botones se sienten cómodos con los pulgares.
 - [ ] Sin errores en consola del dispositivo (`adb logcat`).
 - [ ] Build de WebGL subido y probado en el navegador.
+- [ ] El botón de pantalla completa entra y sale correctamente.
+- [ ] Al bloquear el teléfono o cambiar de app, el juego queda pausado.
 - [ ] Créditos y controles visibles en la página de itch.io.

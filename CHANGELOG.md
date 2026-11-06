@@ -2,6 +2,23 @@
 
 Todas las versiones relevantes del material del curso.
 
+## [1.2.1] · 2026-11-06
+
+### Añadido
+
+- **Botón de pantalla completa para WebGL** (`FullscreenToggle`): se crea solo
+  en el navegador, alterna `Screen.fullScreen` y actualiza su etiqueta
+  (PANTALLA COMPLETA / VENTANA). En el editor se prueba en `Lab_07_UI`.
+- **Pausa automática al perder el foco** en Android y WebGL: `GameFlow` escucha
+  `OnApplicationPause` y `OnApplicationFocus`, detiene el tiempo, muestra el
+  menú de pausa y silencia el audio. Al volver, el jugador decide cuándo seguir.
+- Pruebas TC-45 y TC-46 (50 automatizadas en total).
+
+### Cambiado
+
+- `PauseMenu` expone `Pause()` además de `Toggle()` y controla
+  `AudioListener.pause` al pausar y reanudar.
+
 ## [1.2.0] · 2026-11-06
 
 ### Añadido

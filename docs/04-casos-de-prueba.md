@@ -9,7 +9,7 @@ Los IDs automáticos coinciden con el nombre del método: `TC07_FirstShot_IsAllo
 
 ---
 
-## Pruebas automatizadas (48)
+## Pruebas automatizadas (50)
 
 ### Vida y daño · `Tests/EditMode/HealthTests.cs`
 
@@ -93,6 +93,8 @@ Los IDs automáticos coinciden con el nombre del método: `TC07_FirstShot_IsAllo
 | TC-43 | `LaEntradaVirtualRegistraUnaSolaPulsacion` | Un toque = un salto. |
 | TC-43b | `ResetLimpiaTodo` | Al cambiar de escena no queda entrada pegada. |
 | TC-44 | `ElHUDUsaAreaSegura` | El HUD respeta el notch. |
+| TC-45 | `ElBotonDePantallaCompletaExisteYResponde` | El botón de WebGL crea la UI y alterna sin errores. |
+| TC-46 | `LaPausaAutomaticaDetieneElJuego` | Al perder el foco pausa, silencia el audio y CONTINUAR reanuda. |
 
 ---
 

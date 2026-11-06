@@ -118,6 +118,8 @@ slug-lab/
 
 En móvil aparecen joystick y botones automáticamente; en el editor se prueban en `Lab_07_UI`. Detalle en [`docs/08-multiplataforma.md`](docs/08-multiplataforma.md).
 
+En **WebGL** hay un botón de pantalla completa, y en **Android/WebGL** el juego se pausa solo cuando la app pierde el foco.
+
 ## Regenerar el contenido base
 
 El arte y el audio son **placeholder generados por código** para que el proyecto pese poco y sea reproducible:
