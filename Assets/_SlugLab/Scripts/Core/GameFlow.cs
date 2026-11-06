@@ -27,11 +27,16 @@ namespace SlugLab.Core
         [Header("Reaparición")]
         [SerializeField] private float respawnDelay = 1.4f;
 
+        [Header("Pausa automática")]
+        [Tooltip("En Android y WebGL, pausa cuando la app pierde el foco.")]
+        [SerializeField] private bool pauseOnFocusLoss = true;
+
         public bool IsPaused { get; private set; }
         public bool IsGameOver { get; private set; }
         public bool IsVictory { get; private set; }
 
         private PlayerController _player;
+        private PauseMenu _pauseMenu;
 
         private void Awake()
         {
@@ -44,9 +49,37 @@ namespace SlugLab.Core
             Instance = this;
             Time.timeScale = 1f;
             Time.fixedDeltaTime = 0.02f;
+            AudioListener.pause = false;
 
             _player = FindFirstObjectByType<PlayerController>();
             if (_player != null) _player.Died += HandlePlayerDied;
+        }
+
+        private void OnApplicationPause(bool pauseStatus)
+        {
+            if (pauseStatus) PauseForFocusLoss();
+        }
+
+        private void OnApplicationFocus(bool hasFocus)
+        {
+            if (!hasFocus) PauseForFocusLoss();
+        }
+
+        /// <summary>
+        /// Pausa cuando la app va al fondo (Android) o la pestaña deja de estar
+        /// visible (WebGL). Al volver, el jugador decide cuándo continuar.
+        /// </summary>
+        public void PauseForFocusLoss(bool ignorePlatform = false)
+        {
+            if (!pauseOnFocusLoss) return;
+            if (!ignorePlatform &&
+                !Application.isMobilePlatform &&
+                Application.platform != RuntimePlatform.WebGLPlayer) return;
+
+            if (IsGameOver || IsVictory || IsPaused) return;
+
+            if (_pauseMenu == null) _pauseMenu = FindFirstObjectByType<PauseMenu>();
+            if (_pauseMenu != null) _pauseMenu.Pause();
         }
 
         private void OnDestroy()
@@ -117,6 +150,7 @@ namespace SlugLab.Core
             if (IsVictory) return;
             IsVictory = true;
             Time.timeScale = 1f;
+            AudioListener.pause = false;
             GameSession.AddScore(scorePerBoss);
 
             EndScreen screen = FindFirstObjectByType<EndScreen>(FindObjectsInactive.Include);
@@ -128,6 +162,7 @@ namespace SlugLab.Core
             if (IsGameOver) return;
             IsGameOver = true;
             Time.timeScale = 1f;
+            AudioListener.pause = false;
 
             EndScreen screen = FindFirstObjectByType<EndScreen>(FindObjectsInactive.Include);
             if (screen != null) screen.ShowGameOver();

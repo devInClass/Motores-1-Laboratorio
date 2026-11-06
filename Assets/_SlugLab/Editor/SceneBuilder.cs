@@ -824,9 +824,11 @@ namespace SlugLab.EditorTools
                 Sign = "LAB 07 - INTERFAZ Y FLUJO\n\nPrueba el HUD, la pausa (ESC o boton II),\nla muerte y la pantalla final.\nLos controles tactiles se prueban aqui en el editor.",
                 Decorate = _ =>
                 {
-                    var go = new GameObject("ControlesMovilesDemo");
-                    var mobile = go.AddComponent<MobileControls>();
-                    Binder.Set(mobile, "forceOnDesktop", true);
+                    var mobileGo = new GameObject("ControlesMovilesDemo");
+                    Binder.Set(mobileGo.AddComponent<MobileControls>(), "forceOnDesktop", true);
+
+                    var fullscreenGo = new GameObject("PantallaCompletaDemo");
+                    Binder.Set(fullscreenGo.AddComponent<FullscreenToggle>(), "forceOnDesktop", true);
                 }
             });
 

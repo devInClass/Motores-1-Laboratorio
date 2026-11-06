@@ -47,6 +47,22 @@ namespace SlugLab.UI
             if (panel != null) panel.SetActive(open);
 
             Cursor.visible = open;
+            AudioListener.pause = open;
+        }
+
+        /// <summary>
+        /// Pausa desde código (por ejemplo cuando Android manda la app al fondo).
+        /// No alterna: si ya está pausado no hace nada.
+        /// </summary>
+        public void Pause()
+        {
+            if (GameFlow.Instance == null) return;
+            if (GameFlow.Instance.IsPaused || GameFlow.Instance.IsGameOver || GameFlow.Instance.IsVictory) return;
+
+            GameFlow.Instance.SetPaused(true);
+            if (panel != null) panel.SetActive(true);
+            Cursor.visible = true;
+            AudioListener.pause = true;
         }
 
         public void Resume()
@@ -55,6 +71,7 @@ namespace SlugLab.UI
             GameFlow.Instance.SetPaused(false);
             if (panel != null) panel.SetActive(false);
             Cursor.visible = false;
+            AudioListener.pause = false;
         }
 
         private void OnRestart()

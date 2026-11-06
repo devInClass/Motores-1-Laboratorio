@@ -1,11 +1,13 @@
 using System.Collections;
 using System.Linq;
 using NUnit.Framework;
+using SlugLab.Core;
 using SlugLab.Player;
 using SlugLab.UI;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.TestTools;
+using UnityEngine.UI;
 
 namespace SlugLab.Tests.PlayMode
 {
@@ -16,7 +18,12 @@ namespace SlugLab.Tests.PlayMode
     public class MovilTests
     {
         [TearDown]
-        public void TearDown() => VirtualInput.Reset();
+        public void TearDown()
+        {
+            VirtualInput.Reset();
+            Time.timeScale = 1f;
+            AudioListener.pause = false;
+        }
 
         [UnityTest]
         public IEnumerator TC42_LosControlesTactilesSeConstruyenYResponden()
@@ -58,6 +65,49 @@ namespace SlugLab.Tests.PlayMode
 
             SafeAreaFitter fitter = Object.FindFirstObjectByType<SafeAreaFitter>();
             Assert.IsNotNull(fitter, "El HUD debe tener un contenedor de área segura para los notches.");
+        }
+
+        [UnityTest]
+        public IEnumerator TC45_ElBotonDePantallaCompletaExisteYResponde()
+        {
+            SceneManager.LoadScene("Lab_07_UI");
+            yield return null;
+            yield return null;
+
+            FullscreenToggle toggle = Object.FindFirstObjectByType<FullscreenToggle>();
+            Assert.IsNotNull(toggle, "Falta el botón de pantalla completa.");
+
+            Button button = toggle.GetComponentInChildren<Button>();
+            Assert.IsNotNull(button, "El toggle debe tener un botón.");
+
+            Assert.DoesNotThrow(() => button.onClick.Invoke(), "El clic no debe lanzar errores.");
+            Assert.DoesNotThrow(() => button.onClick.Invoke(), "Debe poder alternarse dos veces.");
+        }
+
+        [UnityTest]
+        public IEnumerator TC46_LaPausaAutomaticaDetieneElJuego()
+        {
+            SceneManager.LoadScene("Nivel1_Cantina");
+            yield return null;
+
+            GameFlow flow = GameFlow.Instance;
+            Assert.IsNotNull(flow, "Falta el GameFlow del nivel.");
+
+            flow.PauseForFocusLoss(true);
+            yield return null;
+
+            Assert.IsTrue(flow.IsPaused, "Al perder el foco debe quedar pausado.");
+            Assert.AreEqual(0f, Time.timeScale, 0.001f, "El tiempo debe detenerse.");
+            Assert.IsTrue(AudioListener.pause, "El audio también se calla.");
+
+            PauseMenu menu = Object.FindFirstObjectByType<PauseMenu>();
+            Assert.IsNotNull(menu, "Debe mostrarse el menú de pausa.");
+            menu.Resume();
+            yield return null;
+
+            Assert.IsFalse(flow.IsPaused, "Al continuar se reanuda.");
+            Assert.AreEqual(1f, Time.timeScale, 0.001f);
+            Assert.IsFalse(AudioListener.pause);
         }
     }
 }
