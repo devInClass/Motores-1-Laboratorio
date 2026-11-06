@@ -31,5 +31,6 @@
 | [`M06-niveles.md`](modulos/M06-niveles.md) | Niveles y cámara | 24–27 |
 | [`M07-ui-flujo.md`](modulos/M07-ui-flujo.md) | Interfaz y flujo | 28–31 |
 | [`M08-audio-juice.md`](modulos/M08-audio-juice.md) | Audio y *juice* | 32–34 |
-| [`M09-jefe-final.md`](modulos/M09-jefe-final.md) | Jefe final | 36–39 |
-| [`M10-cierre.md`](modulos/M10-cierre.md) | Build y portafolio | 40–42 |
+| [`M11-vfx-shaders.md`](modulos/M11-vfx-shaders.md) | VFX y shaders | 35 |
+| [`M09-jefe-final.md`](modulos/M09-jefe-final.md) | Jefe final | 37–40 |
+| [`M10-cierre.md`](modulos/M10-cierre.md) | Build y portafolio | 41–42 |

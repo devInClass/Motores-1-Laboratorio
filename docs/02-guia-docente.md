@@ -30,13 +30,14 @@ El juego de referencia (`Scenes/Juego/`) se usa como *meta*: al inicio de cada m
 | Módulo | El alumno debe poder explicar | Señal de que no lo entendió |
 |---|---|---|
 | M01 Sprites | Por qué 32 PPU y por qué el pivote importa | Cambia el PPU hasta que "se vea bien" |
-| M02 Animación | Qué es un parámetro y qué una transición | Copia el Animator sin poder justificar los estados |
+| M02 Animación | Qué es un parámetro, una transición y un blend tree | Copia el Animator sin poder justificar los estados |
 | M03 Física | Diferencia entre `Update` y `FixedUpdate` | Mueve el Rigidbody en `Update` |
 | M04 Combate | Hitbox ≠ hurtbox y para qué sirve la invulnerabilidad | Pone el daño en el `OnCollisionEnter` del jugador |
 | M05 IA | Qué estados tiene su enemigo y cuándo cambia | Un solo `if` gigante dentro de `Update` |
 | M06 Niveles | Qué hace la cámara y qué el parallax | Fondo pegado a la cámara, sin límites |
 | M07 UI | Cómo se comunica el HUD con la vida | HUD que busca al jugador cada frame |
 | M08 Audio | Por qué un SFX necesita voz propia y volumen | Un único `AudioSource` que se corta |
+| M11 VFX | Qué hace un shader y qué un material | Cambia el color del sprite en vez del material |
 | M09 Jefe | Qué es una fase y qué una telegrafía | Ataques instantáneos e ilegibles |
 | M10 Cierre | Cómo se publica y se presenta un juego | Build sin créditos ni README |
 
@@ -51,6 +52,9 @@ Son **revisiones individuales de 10 minutos**, no exámenes escritos:
 
 Esto evalúa comprensión real y evita el "funciona pero no sé por qué".
 
+**Parcial 1** cubre M00–M05: sprites, animación, física, combate e IA.
+**Parcial 2** cubre M06–M08 y M11: niveles, interfaz, audio y VFX/shaders.
+
 ## Errores que verás una y otra vez
 
 | Síntoma | Causa habitual | Cómo guiarlo |
@@ -62,6 +66,7 @@ Esto evalúa comprensión real y evita el "funciona pero no sé por qué".
 | El HUD no actualiza | Se suscribió al evento después de que ocurriera | Poner un `Debug.Log` en el evento |
 | Todo se ve rosa | Material URP perdido | Reasignar `UniversalRP.asset` |
 | El juego va lento | `Instantiate`/`Destroy` por cada bala | Abrir el Profiler y mostrar el *garbage* |
+| El texto no se lee | Canvas en World Space detrás de los sprites | Usar Screen Space Overlay para los carteles |
 
 ## Cómo evaluar con el repositorio
 

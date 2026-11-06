@@ -13,9 +13,10 @@ Repositorio del curso para la carrera de **Animación**. El objetivo no es solo 
 | Pieza | Para qué sirve |
 |---|---|
 | `Assets/_SlugLab/Scenes/Juego/` | El juego de referencia completo: menú, Nivel 1 (La Cantina) y Nivel 2 (El Jefe). |
-| `Assets/_SlugLab/Scenes/Laboratorio/` | 9 escenas de práctica, una por tema, con objetivos y casos de prueba. |
+| `Assets/_SlugLab/Scenes/Laboratorio/` | 10 escenas de práctica, una por tema, con objetivos y casos de prueba. |
 | `Assets/_SlugLab/Scripts/` | El framework comentado: jugador, combate, IA, jefe, cámara, HUD, audio. |
-| `Assets/_SlugLab/Tests/` | 36 pruebas automatizadas (EditMode y PlayMode) que definen qué significa "está bien". |
+| `Assets/_SlugLab/Tests/` | 42 pruebas automatizadas (EditMode y PlayMode) que definen qué significa "está bien". |
+| `Assets/_SlugLab/Shaders/` | Shader `SpriteFlash`: destello de daño y disolución por umbral. |
 | `Assets/_Curso/Bugs/` | 4 bugs reales para cazar, con tests que fallan hasta que los corrijas. |
 | `Assets/_Curso/MiJuego/` | Tu espacio: aquí construyes tu propio nivel, con tus dibujos. |
 | `docs/` | Calendario de 42 sesiones, guías, rúbricas, catálogo de pruebas y especificación de arte. |
@@ -58,9 +59,10 @@ Son **42 sesiones de 90 minutos** (11 ene – 7 may 2027), dos exámenes parcial
 | M06 | 4 | Niveles: tilemap, cámara, checkpoints | `Lab_06_Niveles` |
 | M07 | 4 | Interfaz y flujo: HUD, pausa, guardado | `Lab_07_UI` |
 | M08 | 3 | Audio y *game feel*: shake, hitstop, SFX | — |
-| — | 1 | **Parcial 2** | — |
+| M11 | 1 | VFX y shaders: flash, dissolve y partículas | `Lab_10_VFX` |
+| — | 1 | **Parcial 2** (revisión de avance) | — |
 | M09 | 4 | Jefe final: fases, patrones, telegrafía | `Lab_08_Jefe` |
-| M10 | 3 | Cierre: build, itch.io, portafolio | — |
+| M10 | 2 | Cierre: build, itch.io, portafolio | — |
 | — | — | **Entrega final: viernes 14 de mayo** | — |
 
 ## Cómo se evalúa
@@ -94,8 +96,9 @@ slug-lab/
 │  │  ├─ Prefabs/        # jugador, enemigos, jefe, balas
 │  │  ├─ Resources/      # SFX y música
 │  │  ├─ Scenes/         # Juego/ y Laboratorio/
-│  │  ├─ Scripts/        # framework (Core, Combat, Player, Enemies, Boss, Level, UI)
-│  │  ├─ Settings/       # ScriptableObjects: armas, enemigos, tiles, clips
+│  │  ├─ Scripts/        # framework (Core, Combat, Player, Enemies, Boss, Level, UI, VFX)
+│  │  ├─ Shaders/        # SpriteFlash: flash de daño y dissolve
+│  │  ├─ Settings/       # ScriptableObjects: armas, enemigos, tiles, clips, materiales
 │  │  └─ Tests/          # EditMode y PlayMode
 │  └─ _Curso/            # tu zona de trabajo
 │     ├─ Bugs/           # cacería de bugs

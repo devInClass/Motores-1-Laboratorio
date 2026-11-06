@@ -22,9 +22,10 @@
 | Niveles y cámara | 24–27 | 10, 12, 17 y 19 de marzo | M06 |
 | Interfaz y flujo | 28–31 | 5, 7, 9 y 12 de abril | M07 |
 | Audio y *juice* | 32–34 | 14, 16 y 19 de abril | M08 |
-| **Parcial 2** | 35 | **miércoles 21 de abril** | Repaso M06–M08 |
-| Jefe final | 36–39 | 23, 26, 28 y 30 de abril | M09 |
-| Cierre | 40–42 | 3, 5 y 7 de mayo | M10 |
+| **VFX y shaders** | 35 | **miércoles 21 de abril** | M11 |
+| **Parcial 2** | 36 | **viernes 23 de abril** | Repaso M06–M08 + M11 |
+| Jefe final | 37–40 | 26, 28 y 30 de abril · 3 de mayo | M09 |
+| Cierre | 41–42 | 5 y 7 de mayo | M10 |
 | **Entrega final** | — | **viernes 14 de mayo** | Demo day |
 
 ## Detalle sesión por sesión
@@ -37,17 +38,17 @@
 | 4 | lun 18 ene | Importación de sprites: PPU, filtro, compresión. | Hoja de personaje importada |
 | 5 | mié 20 ene | Pivotes, recorte de hojas, orden de capas (*sorting*). | Personaje alineado al suelo |
 | 6 | vie 22 ene | Atlas y organización de arte para animación. | Carpeta de arte propia |
-| 7 | lun 25 ene | Clips de animación y *keyframes*. | Idle y Run de tu personaje |
-| 8 | mié 27 ene | Animator: parámetros, transiciones, *exit time*. | Salto y caída conectados |
+| 7 | lun 25 ene | Clips y *keyframes*. Blend tree 1D de locomoción. | Idle ↔ Run con mezcla suave |
+| 8 | mié 27 ene | Animator: parámetros, transiciones y blend tree 2D. | Apuntado en 5 direcciones |
 | 9 | vie 29 ene | Eventos de animación y sincronía con código. | Disparo sincronizado |
-| 10 | mié 3 feb | Revisión de animaciones y *blend* de velocidad. | Set completo de animaciones |
+| 10 | mié 3 feb | Revisión de animaciones y *blend* por velocidad. | Set completo de animaciones |
 | 11 | vie 5 feb | Rigidbody2D, colliders y gravedad. | Personaje que cae y choca |
 | 12 | lun 10 feb | Capas, matriz de colisiones y *raycasts*. | Detección de suelo propia |
 | 13 | mié 12 feb | Salto con *coyote time* y *jump buffer*. | Salto que se siente bien |
 | 14 | lun 15 feb | Plataformas one-way, móviles y pendientes. | Laboratorio de física completo |
 | 15 | mié 17 feb | Hitbox y hurtbox. Capas de ataque. | Cuchillo que daña |
 | 16 | vie 19 feb | Daño, invulnerabilidad y *knockback*. | Feedback de golpe |
-| 17 | lun 22 feb | Proyectiles y *object pooling*. | Disparo sin *garbage* |
+| 17 | lun 22 feb | Proyectiles y *object pooling*. | Disparo sin *garbage* ni balas pegadas |
 | 18 | mié 24 feb | Armas como ScriptableObject. | Dos armas configurables |
 | 19 | vie 26 feb | Máquina de estados de enemigo. | Enemigo que patrulla |
 | 20 | lun 1 mar | Detección: línea de visión y rango. | Enemigo que persigue |
@@ -65,13 +66,13 @@
 | 32 | mié 14 abr | Audio: fuentes, mezcla y SFX. | Disparo con sonido |
 | 33 | vie 16 abr | *Game feel*: shake, hitstop, partículas. | Golpes con impacto |
 | 34 | lun 19 abr | Optimización: *pooling*, *profiler*, builds. | Build de prueba |
-| 35 | **mié 21 abr** | **Parcial 2**: nivel jugable M06–M08 | Revisión individual |
-| 36 | vie 23 abr | Diseño de jefe: fases y patrones. | Jefe con 3 fases |
-| 37 | lun 26 abr | Telegrafía y *readability*. | Ataques legibles |
-| 38 | mié 28 abr | Barra de jefe y *feedback* de fase. | HUD de jefe |
-| 39 | vie 30 abr | *Playtesting* y balance. | Ajustes por pruebas |
-| 40 | lun 3 may | Build final, *itch.io* y créditos. | Build publicado |
-| 41 | mié 5 may | Portafolio: GIFs, *devlog*, presentación. | Ficha de proyecto |
+| 35 | **mié 21 abr** | **VFX y shaders**: flash, dissolve y partículas | Material propio aplicado |
+| 36 | **vie 23 abr** | **Parcial 2**: nivel jugable M06–M08 + M11 | Revisión individual |
+| 37 | lun 26 abr | Diseño de jefe: fases y patrones. | Jefe con 3 fases |
+| 38 | mié 28 abr | Telegrafía y *readability*. | Ataques legibles |
+| 39 | vie 30 abr | Barra de jefe y *feedback* de fase. | HUD de jefe |
+| 40 | lun 3 may | *Playtesting* y balance. | Ajustes por pruebas |
+| 41 | mié 5 may | Build final, *itch.io* y créditos. | Build publicado |
 | 42 | vie 7 may | Ensayo de demo day y revisión cruzada. | Checklist final |
 | — | **vie 14 may** | **Entrega final y demo day** | Juego + reporte + presentación |
 

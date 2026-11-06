@@ -1,6 +1,6 @@
 # M09 · Jefe final: fases, patrones y telegrafía
 
-**Sesiones 36–39** · 23, 26, 28 y 30 de abril de 2027
+**Sesiones 37–40** · 26, 28 y 30 de abril · 3 de mayo de 2027
 **Escena:** `Lab_08_Jefe` · **Entregable:** jefe con 3 fases y barra de vida
 
 ## Objetivo

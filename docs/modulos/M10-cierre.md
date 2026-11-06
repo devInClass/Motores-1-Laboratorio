@@ -1,6 +1,6 @@
 # M10 · Cierre: build, publicación y portafolio
 
-**Sesiones 40–42** · 3, 5 y 7 de mayo de 2027
+**Sesiones 41–42** · 5 y 7 de mayo de 2027
 **Escena:** juego propio · **Entregable:** build publicado + ficha de proyecto
 
 ## Objetivo
@@ -19,8 +19,7 @@ Que el juego salga de Unity y llegue a alguien. Un proyecto que solo corre en el
 
 | Sesión | Tema | Práctica |
 |---|---|---|
-| 40 | Build | Generar `.exe` y probarlo en otra máquina |
-| 41 | Publicación | Subir a itch.io con portada y GIF |
+| 41 | Build y publicación | Generar `.exe`, probarlo en otra máquina y subirlo a itch.io |
 | 42 | Ensayo | Demo day y revisión cruzada |
 
 ## Práctica guiada

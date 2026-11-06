@@ -7,7 +7,7 @@ La nota final combina tres evidencias. No hay examen teórico: se evalúa lo que
 | Escenarios de práctica (9 laboratorios) | 25 % | A lo largo del curso |
 | Cacería de bugs | 15 % | Módulo 9 (y recuperable hasta el final) |
 | Parcial 1 (M00–M05) | 15 % | Sesión 23 · lunes 8 de marzo |
-| Parcial 2 (M06–M08) | 15 % | Sesión 35 · miércoles 21 de abril |
+| Parcial 2 (M06–M08 + M11) | 15 % | Sesión 36 · viernes 23 de abril |
 | Juego propio + reporte + demo | 30 % | Viernes 14 de mayo |
 
 Para aprobar se necesita **al menos 60 % en el juego propio** y **los 4 bugs corregidos**. Los laboratorios se pueden recuperar hasta la entrega final.
@@ -85,6 +85,8 @@ Entrega: build jugable (`.zip` o itch.io), repositorio, `reporte-pruebas.md`, GI
 
 Se valora la **coherencia** (PPU, pivotes, paleta) por encima del detalle. Un personaje simple bien animado vale más que uno complejo que se ve borroso.
 
+Un *flash* de daño o un *dissolve* bien aplicado suma en este apartado; partículas sin criterio restan.
+
 ### 4.3 Código y arquitectura (6 pts)
 
 | Nivel | Descripción |
@@ -117,8 +119,8 @@ Se valora la **coherencia** (PPU, pivotes, paleta) por encima del detalle. Un pe
 | **Parcial 1** | Lun 8 mar | En vivo |
 | Laboratorio 6 | Sesión 27 | idem |
 | Laboratorio 7 | Sesión 31 | idem |
-| **Parcial 2** | Mié 21 abr | En vivo |
-| Cacería de bugs | Sesión 39 | 4 tests en verde |
+| **Parcial 2** | Vie 23 abr | En vivo |
+| Cacería de bugs | Sesión 40 | 4 tests en verde |
 | **Juego final** | **Vie 14 may** | Build + repo + reporte + GIF |
 
 ## 6. Política de uso de IA

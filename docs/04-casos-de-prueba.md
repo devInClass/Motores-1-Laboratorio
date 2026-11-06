@@ -9,7 +9,7 @@ Los IDs automáticos coinciden con el nombre del método: `TC07_FirstShot_IsAllo
 
 ---
 
-## Pruebas automatizadas (36)
+## Pruebas automatizadas (42)
 
 ### Vida y daño · `Tests/EditMode/HealthTests.cs`
 
@@ -70,12 +70,23 @@ Los IDs automáticos coinciden con el nombre del método: `TC07_FirstShot_IsAllo
 
 | ID | Nombre | Qué verifica |
 |---|---|---|
-| TC-31 | `TodasLasEscenasCarganSinComponentesFaltantes` | Las 12 escenas cargan sin *missing scripts*. |
+| TC-31 | `TodasLasEscenasCarganSinComponentesFaltantes` | Las 13 escenas cargan sin *missing scripts*. |
 | TC-32 | `ElJugadorQuedaApoyadoEnElSuelo` | El jugador no atraviesa el tilemap. |
 | TC-33 | `ElNivelTieneHUD` | Hay HUD y menú de pausa. |
 | TC-34 | `LaGravedadHaceCaerAlJugadorYElSaltoLoSube` | Gravedad y salto funcionan. |
 | TC-35 | `LaBalaDelJugadorDaniaAlEnemigo` | Una bala quita vida. |
 | TC-36 | `ElEnemigoPatrulla` | La IA se mueve sola. |
+
+### Regresiones y estructura
+
+| ID | Nombre | Qué verifica |
+|---|---|---|
+| TC-37 | `LasBalasNoHeredanElMovimientoDelJugador` | Las balas viven en la raíz y no se arrastran con el jugador (bug de disparo). |
+| TC-38 | `ElAnguloDeApuntadoCubreLasCincoDirecciones` | 90°, 45°, 0°, −45° y −90°. |
+| TC-38b | `ElAnguloSeMantieneEntreMenos90Y90` | El ángulo no se sale del rango del blend tree. |
+| TC-39 | `ElCartelDeInstruccionesSeDibujaEnOverlay` | El cartel es Screen Space Overlay y tiene fuente (bug de texto invisible). |
+| TC-40 | `ElAnimatorDelJugadorUsaDosBlendTrees` | Locomotion 1D y Aim 2D con 10 hijos. |
+| TC-40b | `ExistenLosParametrosQueUsaElCodigo` | No falta ningún parámetro del Animator. |
 
 ---
 
@@ -102,6 +113,8 @@ Marca cada una en el reporte con **OK / FALLA / N/A** y una captura.
 | TC-203 | Salto y caída | Pulsa `Espacio` y suelta. | Se ve Jump al subir y Fall al bajar. |
 | TC-204 | Evento de disparo | Pulsa `J`. | La animación de disparo sale una vez, no en bucle. |
 | TC-205 | Volteo | Cambia de dirección. | El sprite mira hacia donde camina y el arma queda delante. |
+| TC-206 | Apuntado arriba | Mantén `↑` y dispara. | El brazo apunta arriba sin girar el cuerpo. |
+| TC-207 | Correr apuntando | Corre y dispara en diagonal. | Se mezclan carrera y apuntado sin saltos bruscos. |
 
 ### M03 · Física
 
@@ -162,6 +175,18 @@ Marca cada una en el reporte con **OK / FALLA / N/A** y una captura.
 | TC-802 | Impacto | Golpea a un enemigo. | Hay sacudida de cámara breve. |
 | TC-803 | Música | Entra al nivel. | La música suena en bucle a volumen bajo. |
 | TC-804 | Sin saturación | Muchos sonidos a la vez. | No hay distorsión. |
+
+### M11 · VFX y shaders
+
+| ID | Caso | Pasos | Resultado esperado |
+|---|---|---|---|
+| TC-1101 | Flash visible | Mira al soldado con `_FlashAmount = 1`. | Se ve completamente blanco. |
+| TC-1102 | Flash sutil | Mira al de `0.5`. | Se ve aclarado pero conserva el dibujo. |
+| TC-1103 | Dissolve | Mira al granadero con `_DissolveAmount = 0.55`. | Pierde píxeles de forma irregular. |
+| TC-1104 | Dissolve total | Sube `_DissolveAmount` a 1. | No queda nada visible. |
+| TC-1105 | Partículas | Entra a `Lab_10_VFX`. | Se ven chispas y una explosión. |
+| TC-1106 | Orden de dibujo | Observa las partículas. | Van delante del suelo y detrás del HUD. |
+| TC-1107 | Rendimiento | Mira el Profiler con las partículas activas. | Se mantiene por encima de 60 FPS. |
 
 ### M09 · Jefe
 

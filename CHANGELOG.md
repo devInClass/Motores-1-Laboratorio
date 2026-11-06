@@ -2,6 +2,34 @@
 
 Todas las versiones relevantes del material del curso.
 
+## [1.1.0] · 2026-11-06
+
+### Añadido
+
+- **Blend tree 1D** de locomoción (idle ↔ run por `Speed01`).
+- **Blend tree 2D** de apuntado: 5 direcciones (arriba, diagonal arriba, frente,
+  diagonal abajo, abajo) × de pie/corriendo, con `AimAngle` y `Speed01`.
+- 20 sprites de apuntado generados (`player_aim_*`).
+- Módulo **M11 · VFX y shaders** (sesión 35, 21 de abril): laboratorio
+  `Lab_10_VFX`, shader `SpriteFlash` con flash de daño y dissolve, y dos
+  prefabs de partículas (`VFX_Chispas`, `VFX_Explosion`).
+- Pruebas TC-37 (balas), TC-38 (ángulo de apuntado), TC-39 (cartel) y
+  TC-40 (estructura del Animator).
+
+### Corregido
+
+- **Balas atoradas o con velocidad irregular:** se instanciaban como hijas del
+  jugador y heredaban su movimiento. Ahora viven en un contenedor en la raíz.
+- **Cartel de instrucciones invisible:** el canvas estaba en World Space y
+  quedaba detrás de los sprites. Ahora es Screen Space Overlay.
+- **Personaje "congelado" al disparar:** el disparo usaba un trigger que
+  bloqueaba la pose. Ahora el apuntado es un blend tree continuo.
+
+### Cambiado
+
+- El calendario gana una sesión de VFX/shaders; el Parcial 2 pasa al
+  viernes 23 de abril y M10 se comprime a dos sesiones.
+
 ## [1.0.0] · 2027-01-11
 
 Primera versión lista para el semestre enero–mayo 2027.
