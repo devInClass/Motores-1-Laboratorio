@@ -2,6 +2,34 @@
 
 Todas las versiones relevantes del material del curso.
 
+## [1.2.3] · 2026-11-06
+
+### Corregido
+
+- **Reaparición fuera del nivel:** al morir sin haber tocado un checkpoint, el
+  jugador revivía en el punto exacto de la muerte (el fondo del precipicio) y
+  quedaba atascado. Ahora reaparece en el **punto de inicio del nivel**.
+- **Checkpoint heredado entre niveles:** al pasar a la siguiente escena se
+  conservaba el checkpoint anterior y la reaparición podía caer fuera del nivel.
+  Ahora se limpia al cargar cada nivel (`GameSession.ClearCheckpoint()`).
+- Pruebas TC-47, TC-48 y TC-49 (53 automatizadas en total).
+
+### Cambiado
+
+- La carpeta de reportes pasa de `entregas/` (raíz, invisible en Unity) a
+  **`Assets/_Curso/Entregas/`**, para que el alumno la vea en el Project.
+
+## [1.2.2] · 2026-11-06
+
+### Añadido
+
+- **Carpetas del alumno versionadas:** `.gitkeep` en `MiJuego/Escenas`,
+  `Prefabs`, `Scripts`, `Arte`, `Animaciones` y `Audio`; antes no aparecían al
+  clonar porque Git no guarda carpetas vacías.
+- **Importador de arte y audio para `MiJuego`:** los dibujos del alumno entran
+  con PPU 32, filtro Point y pivote correcto, y su audio con Vorbis.
+- Guía del flujo del alumno y reportes de laboratorio.
+
 ## [1.2.1] · 2026-11-06
 
 ### Añadido
