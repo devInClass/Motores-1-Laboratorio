@@ -47,7 +47,7 @@ git push
 | Scripts propios | `Assets/_Curso/MiJuego/Scripts/` | Sí |
 | Sprites y animaciones | `Assets/_Curso/MiJuego/Arte/` y `Animaciones/` | Sí |
 | Audio propio | `Assets/_Curso/MiJuego/Audio/` | Sí |
-| Reportes de laboratorio | `entregas/M0X-apellido.md` | Sí |
+| Reportes de laboratorio | `Assets/_Curso/Entregas/M0X-apellido.md` | Sí |
 | Builds (`.exe`, `.apk`, WebGL) | fuera del repo (itch.io / Drive) | No |
 | Caché de Unity | `Library/`, `Temp/`, `Logs/` | No (ignorado) |
 
@@ -67,7 +67,7 @@ duplícalo en `MiJuego/`**.
 
 ### Entrega
 
-1. Reporte completo en `entregas/`.
+1. Reporte completo en `Assets/_Curso/Entregas/`.
 2. Build subido a itch.io (el enlace va en el `README.md`).
 3. Tag:
    ```bash

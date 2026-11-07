@@ -11,7 +11,8 @@ _Curso/
 │  ├─ Arte/
 │  ├─ Animaciones/
 │  └─ Audio/
-└─ Bugs/             # cacería de bugs (M11)
+├─ Entregas/         # tus reportes de laboratorio
+└─ Bugs/             # cacería de bugs
    ├─ Scripts/       # aquí corriges
    └─ Tests/         # no tocar: son el juez
 ```
@@ -24,7 +25,7 @@ _Curso/
 2. **No edites `Bugs/Tests/`.** Los tests son el criterio de evaluación; solo se
    corrige el código de `Bugs/Scripts/`.
 3. **Tu juego vive en `MiJuego/`.** Todo lo que entregas tiene que estar ahí o en
-   `entregas/`.
+   `Entregas/`.
 
 ## Primeros pasos
 

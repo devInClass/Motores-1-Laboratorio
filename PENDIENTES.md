@@ -4,9 +4,9 @@ Nota para retomar el trabajo sin releer toda la conversación.
 
 ## Estado actual
 
-- Repositorio en `slug-lab/`, rama `main`, tag **v1.2.1**.
+- Repositorio en `slug-lab/`, rama `main`, tag **v1.2.3**.
 - Unity **6000.3.10f1** (URP 2D, Input Manager clásico).
-- **38/38** pruebas EditMode y **12/12** PlayMode en verde (50 en total).
+- **38/38** pruebas EditMode y **15/15** PlayMode en verde (53 en total).
 - 13 escenas: menú, 2 niveles, 10 laboratorios.
 - Animator del jugador con blend tree 1D de locomoción y 2D de apuntado.
 - Módulo **M11 · VFX y shaders** con `Lab_10_VFX` (flash, dissolve, partículas).
@@ -18,8 +18,8 @@ Nota para retomar el trabajo sin releer toda la conversación.
 ## Verificado en esta ronda
 
 1. Compila sin errores y regenera las 13 escenas.
-2. Suites EditMode (38) y PlayMode (12) en verde, incluida la pausa automática
-   y el botón de pantalla completa.
+2. Suites EditMode (38) y PlayMode (15) en verde, incluidas la pausa automática,
+   el botón de pantalla completa y la reaparición sin checkpoint.
 3. La configuración de Android/WebGL se aplica: horizontal, ARMv7 + ARM64,
    IL2CPP, API 25 y Brotli con fallback.
 4. **Build de Android: falla en este equipo** con `Burst internal compiler error:

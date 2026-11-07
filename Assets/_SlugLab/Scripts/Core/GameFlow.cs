@@ -37,6 +37,8 @@ namespace SlugLab.Core
 
         private PlayerController _player;
         private PauseMenu _pauseMenu;
+        private Vector3 _levelStartPosition;
+        private bool _hasLevelStart;
 
         private void Awake()
         {
@@ -51,8 +53,27 @@ namespace SlugLab.Core
             Time.fixedDeltaTime = 0.02f;
             AudioListener.pause = false;
 
+            // El checkpoint pertenece al nivel: no se hereda de la escena anterior.
+            GameSession.ClearCheckpoint();
+
             _player = FindFirstObjectByType<PlayerController>();
-            if (_player != null) _player.Died += HandlePlayerDied;
+            if (_player != null)
+            {
+                CacheLevelStart();
+                _player.Died += HandlePlayerDied;
+            }
+        }
+
+        /// <summary>
+        /// Guarda el punto de aparición del nivel. Es el respaldo cuando el
+        /// jugador muere antes de tocar un checkpoint (por ejemplo, al caer a un
+        /// precipicio): sin esto reaparecería en el fondo del hueco.
+        /// </summary>
+        private void CacheLevelStart()
+        {
+            if (_player == null || _hasLevelStart) return;
+            _levelStartPosition = _player.transform.position;
+            _hasLevelStart = true;
         }
 
         private void OnApplicationPause(bool pauseStatus)
@@ -120,9 +141,13 @@ namespace SlugLab.Core
                 _player = FindFirstObjectByType<PlayerController>();
                 if (_player == null) yield break;
                 _player.Died += HandlePlayerDied;
+                CacheLevelStart();
             }
 
-            Vector2 position = GameSession.HasCheckpoint ? GameSession.Checkpoint : (Vector2)_player.transform.position;
+            Vector2 position = GameSession.HasCheckpoint
+                ? GameSession.Checkpoint
+                : (Vector2)_levelStartPosition;
+
             _player.RespawnAt(position);
 
             if (CameraFollow2D.Current != null) CameraFollow2D.Current.SnapToTarget();

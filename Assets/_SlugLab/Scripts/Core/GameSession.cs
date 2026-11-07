@@ -72,6 +72,16 @@ namespace SlugLab.Core
             CheckpointChanged?.Invoke(position);
         }
 
+        /// <summary>
+        /// Borra el checkpoint. Se llama al cargar un nivel para no heredar el
+        /// punto de control de la escena anterior.
+        /// </summary>
+        public static void ClearCheckpoint()
+        {
+            Checkpoint = Vector2.zero;
+            HasCheckpoint = false;
+        }
+
         public static void SetLevel(int index)
         {
             LevelIndex = Mathf.Max(0, index);

@@ -9,7 +9,7 @@ Los IDs automáticos coinciden con el nombre del método: `TC07_FirstShot_IsAllo
 
 ---
 
-## Pruebas automatizadas (50)
+## Pruebas automatizadas (53)
 
 ### Vida y daño · `Tests/EditMode/HealthTests.cs`
 
@@ -95,6 +95,9 @@ Los IDs automáticos coinciden con el nombre del método: `TC07_FirstShot_IsAllo
 | TC-44 | `ElHUDUsaAreaSegura` | El HUD respeta el notch. |
 | TC-45 | `ElBotonDePantallaCompletaExisteYResponde` | El botón de WebGL crea la UI y alterna sin errores. |
 | TC-46 | `LaPausaAutomaticaDetieneElJuego` | Al perder el foco pausa, silencia el audio y CONTINUAR reanuda. |
+| TC-47 | `AlMorirSinCheckpointReapareceEnElInicio` | Caer al precipicio sin checkpoint devuelve al inicio, no al fondo. |
+| TC-48 | `ElCheckpointNoSeHeredaEntreNiveles` | Al cambiar de nivel se limpia el checkpoint anterior. |
+| TC-49 | `ConCheckpointReapareceEnElCheckpoint` | Con checkpoint, la reaparición ocurre ahí. |
 
 ---
 

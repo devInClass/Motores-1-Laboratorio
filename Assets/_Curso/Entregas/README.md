@@ -1,16 +1,17 @@
 # Entregas
 
-Aquí van tus **reportes de laboratorio**, uno por módulo.
+Aquí van tus **reportes de laboratorio**, uno por módulo. Está dentro de `Assets/`
+para que lo veas en la ventana **Project** de Unity.
 
-1. Copia `plantillas/reporte-pruebas.md`.
-2. Renómbralo `M03-apellido.md` (o `M03-nombre.md`).
+1. Copia `plantillas/reporte-pruebas.md` (está en la raíz del repositorio).
+2. Pégalo aquí y renómbralo `M03-apellido.md` (o `M03-nombre.md`).
 3. Complétalo con los resultados y una captura o GIF por caso.
 4. Commit y push.
 
 Ejemplo:
 
 ```
-entregas/
+Assets/_Curso/Entregas/
 ├─ M01-garcia.md
 ├─ M03-garcia.md
 └─ final-garcia.md

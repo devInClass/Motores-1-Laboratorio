@@ -48,7 +48,7 @@ Repositorio del curso para la carrera de **Animación**. El objetivo no es solo 
 Cada alumno crea **su propio repositorio** a partir de la plantilla y trabaja en
 `Assets/_Curso/MiJuego/`: ahí van sus escenas, prefabs, scripts y arte. El
 material de `Assets/_SlugLab/` se lee y se copia, **no se edita**. Los reportes
-de laboratorio van en `entregas/`.
+de laboratorio van en `Assets/_Curso/Entregas/`.
 
 El flujo completo (crear el repo, clonar, qué tocar y qué no, cómo entregar)
 está en [`docs/06-flujo-git.md`](docs/06-flujo-git.md) y en
@@ -113,11 +113,10 @@ slug-lab/
 │  │  └─ Tests/          # EditMode y PlayMode
 │  └─ _Curso/            # tu zona de trabajo
 │     ├─ Bugs/           # cacería de bugs
-│     ├─ MiJuego/        # tu nivel
-│     └─ Plantillas/
+│     ├─ Entregas/       # reportes de laboratorio
+│     └─ MiJuego/        # tu nivel
 ├─ docs/                 # calendario, guías, rúbricas, catálogo
 ├─ plantillas/           # entregables en Markdown
-├─ entregas/             # reportes que sube el alumno
 ├─ tools/                # generadores de arte y audio (Python)
 └─ .github/              # plantillas de issue y PR
 ```
